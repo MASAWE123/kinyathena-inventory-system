@@ -1,0 +1,155 @@
+<style>
+.sidebar{
+  position: fixed;
+  width: 300px;
+  top:60px;
+  left: 0px;
+  bottom: 0px;
+  background-color: rgb(14, 39, 68);
+  color: white;
+}
+.sidebar .nav-sidebar{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  /* background-color: red; */
+}
+.sidebar .nav-sidebar label{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+.sidebar .nav-sidebar label:hover{
+  background-color: rgba(255, 255, 255, 0.2);;
+}
+.sidebar .nav-sidebar label i{
+  margin-right: 14px;
+  margin-left: 60px;
+  font-size:25px;
+}
+.slider{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgb(37, 150, 190);
+  height: calc(400px*1/6);
+  border-radius: 10px;
+  margin: 0 -5px;
+  transition: all 0.3s ease;
+}
+ 
+#inventory:checked ~ .slider{
+  top: calc(400px * 1/6);
+}
+#stockin:checked ~ .slider{
+  top: calc(400px * 2/6);
+}
+#purchases:checked ~ .slider{
+  top: calc(400px * 3/6);
+}
+#suppliers:checked ~ .slider{
+  top: calc(400px * 4/6);
+}
+#report:checked ~ .slider{
+  top: calc(400px * 5/6);
+}
+
+nav input{
+  display: none;
+}
+a{
+  display: flex;
+  text-decoration: none;
+  color: white;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+</style>
+
+</head>
+<body>
+<header>
+<div class="header">
+  <div class="leftside">
+    <div class="menu">
+      <i class="fa-solid fa-droplet"></i>
+    </div>
+
+    <div class="logo">
+      KENYATHENA  INVENTORY
+    </div>
+  </div>
+
+  <div class="rightside">
+    <div class="notification">
+      <i class="fa-solid fa-bell"></i>
+    </div>
+
+    <div class="profile">
+        <span class="profilename"></span>
+        <div class="image">
+          <img src="images/WAMBOI.jpg" alt="">
+        </div>
+    </div>
+  </div>
+</div> 
+</header>
+<nav class="sidebar">
+<input type="radio" id="dashboard" name="radio" 
+{% if request.resolver_match.url_name == 'home' %}checked {% endif %}>
+ <input type="radio"  name="radio" id="inventory"
+ {% if request.resolver_match.url_name == 'stock' %}checked {% endif %}>
+ <input type="radio" name="radio" id="stockin">
+ <input type="radio" name="radio" id="purchases">
+ <input type="radio" name="radio" id="suppliers">
+ <input type="radio" name="radio" id="report">
+ <div class="slider"></div>
+<div class="nav-sidebar">
+  <label for="dashboard" >
+    <a href="{% url 'home'%}" onclick="moveSlider(event,'dashboard',this.href)">
+      <i class="fa-solid fa-house"></i>Dashboard
+    </a>
+  </label>
+
+  <label for="inventory">
+    <a href="{% url 'stock' %}" onclick="moveSlider(event, 'inventory', this.href)" >
+      <i class="fa-solid fa-cube"></i>Inventory
+    </a>
+    
+  </label>
+
+  <label for="stockin">
+    <i class="fa-solid fa-download"></i></i>Stock in
+  </label>
+
+  <label for="purchases">
+    <i class="fa-solid fa-cart-shopping"></i></i>Purchases
+  </label>
+
+  <label for="suppliers">
+    <i class="fa-solid fa-users"></i>Suppliers
+  </label>
+
+  <label for="report">
+    <i class="fa-solid fa-chart-simple"></i>Reports
+  </label>
+
+</div>
+
+</nav>
+<script>
+  function moveSlider(event, id, url) {
+      event.preventDefault();
+  
+      document.getElementById(id).checked = true;
+  
+      setTimeout(() => {
+          window.location.href = url;
+      }, 300);
+  }
+  </script>

@@ -1,0 +1,153 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+  
+  <style>
+    .popup{
+      position: absolute;
+      background-color: white;
+      height: 600px;
+      width: 30%;
+      left: 50%;
+      top: 50%;
+      transform:translate(-50%,-50%);
+      border-radius: 8px;
+    
+     
+    }
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        opacity: 0;
+        transition: all ease 0.3s;
+        pointer-events: none;
+    }
+    .addPurchase:has(#check:checked) ~ .overlay{
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    
+    </style>
+    
+    <div class="addPurchase">
+      <span style="font-weight: 700;">Purchases</span>
+      <input type="checkbox" id="check">
+      <label for="check">Add Purchase</label>
+    
+    </div>
+    
+    <div class="purchase" style="margin-right: 20px;">
+      <table class="table table-striped"  >
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Supplier</th>
+          <th scope="col">Items</th>
+          <th scope="col">Date Ordered</th>
+          <th scope="col">Status</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for purchase in purchases %}
+        <tr>
+          <th scope="row">{{purchase.id}}</th>
+          <td>{{purchase.supplier}}</td>
+          <td>{{purchase.items.count}}</td>
+          <td>{{purchase.date_ordered}}</td>
+          <td>{{purchase.status}}</td>
+          <td>
+            <a href="{% url 'receive' purchase.id %}">
+              <button>Receive</button>
+            </a>
+            
+          </td>
+        </tr>
+        {% endfor %}
+      
+      </tbody>
+    </table>
+    <div class="total" style="font-weight: 700;">
+      <span >Total Purchases:</span>
+      <span>{{purchase_count}}</span>
+    </div>
+    </div>
+    
+    <div class="overlay">
+      <div class="popup">
+        <div>
+          <span>Add Purchase</span>
+          <div>
+            <label for="check">
+              <i class="fa-solid fa-x"></i>
+            </label>
+            
+
+        
+  
+            <form action="{% url 'purchase' %}" method="POST">
+              {% csrf_token %}
+                <div class="supplierchoice">
+                  <label for="supplier">Supplier</label>
+                  <input type="text" placeholder="Select Supplier" id="supplier" name="supplier">
+                </div>
+            
+              <div class="items">
+                <div>Items</div>
+                <div>
+                    <span>Item</span>
+                    <span>Quantity</span>
+                </div>
+              </div>
+
+              <div id="itemRows">
+                <div class="item-row">
+                  <input type="text" name="item" required>
+                  <input type="number" name="quantity" required>
+                  <button class="delete-item" type="button">delete</button>
+                </div>
+              </div>
+          
+            
+          </div>
+        </div>
+        <br><br>
+        <button id="addItem" type="button">Add Another Item</button>
+        <button type="button">cancel</button>
+        <button type="submit">save Purchase</button>
+      </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const addItem = document.getElementById('addItem');
+      const itemRows = document.getElementById('itemRows');
+      
+      
+      addItem.addEventListener('click',function(){
+        const newRow = document.createElement('div')
+        newRow.classList.add('item-row');
+        newRow.innerHTML = `
+           <input type="text" name = 'item' required>
+                <input type="number" name = 'quantity' required>
+                <button class="delete-item" type="button">delete</button>`;
+        itemRows.appendChild(newRow);
+        
+      });
+
+      itemRows.addEventListener('click', function(event) {
+
+      if (event.target.classList.contains('delete-item')) {
+
+          event.target.parentElement.remove();
+
+      }
+
+      });
+    </script>
+
+{% endblock %}

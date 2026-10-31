@@ -1,0 +1,121 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<style>
+  .table_row{
+    text-align: center;
+  }
+  body{
+    margin: 90px 0 0 350px;}
+</style>
+  <main>
+    <div class="Stock">
+      <span>Dashboard </span>
+    </div>
+    <div class="main">
+      <div class="totalItems">
+        <div class="containerdiv">
+          <div class="number">{{items}}</div>
+          <div class="name">TotalItems</div>
+        </div>
+        <div class="icon">
+          <i class="fa-solid fa-table-list"></i>
+        </div>
+      
+      </div>
+      <div class="lowStock">
+        <div>
+          <div class="containerdiv">
+            <div class="number">{{lowStock}}</div>
+            <div class="name">LowStock</div>
+          </div>
+         
+        </div>
+        <div class="icon">
+          <i class="fa-solid fa-box-open"></i>
+        </div>
+      </div>
+
+      <div class="outStock">
+        <div>
+          <div class="containerdiv">
+            <div class="number">{{outStock}}</div>
+          <div class="name">OutStock</div>
+          </div>
+          
+        </div>
+        <div class="icon">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+      </div>
+
+      <div class="suppliers">
+        <div>
+          <div class="containerdiv">
+            <div class="number">{{suppliers_count}}</div>
+            <div class="name">Suppliers</div>
+          </div>
+        
+        </div>
+        <div class="icon">
+          <i class="fa-solid fa-warehouse"></i>
+        </div>
+      </div>
+    </div>
+    <div class="Stock">
+      <span>Recent Stock Movements  </span>
+    </div>
+    <div class="recentStock">
+      <table class="table table-striped" >
+        <thead>
+          <tr class="table_row">
+            <th scope="col">Items</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Movement</th>
+            <th scope="col">Reason</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for stock_Movement in stock_Movements %}
+          <tr class="table_row">
+            <th scope="row">{{stock_Movement.item}}</th>
+            <td>{{stock_Movement.quantity}}</td>
+            <td>{{stock_Movement.movement}}</td>
+            <td>{{stock_Movement.reason}}</td>
+            <td>{{stock_Movement.date}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="Stock">
+      <span>Low Stock Items  </span>
+    </div>
+
+   <div class="lowStockItem">
+      <table class="table table-striped" >
+        <thead>
+          <tr class="table_row">
+            <th scope="col">Items</th>
+            <th scope="col">Current stock</th>
+            <th scope="col"> Low Stock Date</th>
+            <th scope="col">Below Threshold</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for low_stock in low_stock_table %}
+          <tr class="table_row">
+            <th scope="row">{{low_stock.item}}</th>
+            <td>{{low_stock.quantity}}</td>
+            <td>{{low_stock.low_stock_date}}</td>
+            <td>{{low_stock.low_by}}</td>
+            
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+{% endblock %}

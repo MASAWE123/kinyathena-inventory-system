@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="quantitystockout">
+      <span>Quantity to Stock Out</span>
+      <input type="number" name="quantity" required>
+    </div>
+    
+    <div class="reason">
+      <span>Reason</span>
+      <input type="text" name="reason" required>
+    </div>
+    
+    <div class="notes">
+      <span>Notes(Optional)</span>
+      <textarea name="notes" id="notearea"></textarea>
+    </div>
+    <input type="submit">
+ 
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<style>
+  main .containe{
+    position: fixed;
+    left:250px;
+    top: 80px;
+    bottom: 40px;
+    border-radius: 5px;
+    background-color: white;
+    right: 20px;
+
+  }
+  .tablecontent{
+    width: 98%;
+  }
+  table{
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 100px;
+  }
+</style>
+  <main>
+    <div class="containe">
+      
+      <div class="title">
+        <a href="{% url 'purchase' %}">  
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <strong>Receive Purchase</strong>
+      </div>
+
+      <div class="details">
+        <div class="first">
+          <span>Purchase:7</span>
+          <span>Status:   Pending</span>
+        </div>
+        <div class="second">
+          <span>Supplier:ABC PIPES Ltd</span>
+          <span>Total Items:  3</span>
+        </div>
+        <div class="third">
+          <span>Date Ordered:</span>
+        </div>
+      </div> 
+
+      <form action="{% url 'receive' purchase.id %}" method="post">
+         {% csrf_token %}
+        <div class="tablecontent">
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Ordered Quantity</th>
+                <th scope="col">Already Received</th>
+                <th scope="col">Receive Now</th>
+                <th scope="col">Remaining</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in purchaseItem %}
+              <tr>
+                <th scope="row">
+                  <div>{{item.item}}</div>
+                  <div>(Item ID:{{item.id}})</div>
+                  
+                </th>
+                <td>{{item.quantity_ordered}}</td>
+                <td>{{item.quantity_received}}</td>
+                <td><input type="number" min="1" name="receive_{{item.id}}"></td>
+                <td>{{item.remaining}}</td>
+              </tr>
+            
+             
+           {% endfor %}
+           
+        
+              
+            </tbody>
+          </table>
+        </div>
+  
+        <div>
+          <button type="submit">submit</button>
+        </div>
+  
+
+      </form>
+ 
+    </div>
+  </main>
+  {% endblock %}
