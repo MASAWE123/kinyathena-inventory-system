@@ -1,49 +1,6 @@
 {% extends 'main/base.html' %}
 {% block content %}
 <style>
-
-.sidebar{
-      position: fixed;
-      width: 300px;
-      top:60px;
-      left: 0px;
-      bottom: 0px;
-      background-color: rgb(14, 39, 68);
-      color: white;
-    }
-    .sidebar .nav-sidebar{
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      height: 400px;
-      /* background-color: red; */
-    }
-    .sidebar .nav-sidebar label{
-      flex: 1;
-      display: flex;
-      align-items: center;
-      border-radius: 10px;
-      margin-bottom: 5px;
-    }
-    .sidebar .nav-sidebar label:hover{
-      background-color: rgba(255, 255, 255, 0.2);;
-    }
-    .sidebar .nav-sidebar label i{
-      margin-right: 14px;
-      margin-left: 60px;
-      font-size:25px;
-    }
-    .slider{
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: rgb(37, 150, 190);
-      height: calc(400px*1/6);
-      border-radius: 10px;
-      margin: 0 -5px;
-      transition: all 0.3s ease;
-    }
     #inventory:checked ~ .slider{
       top: calc(400px * 1/6);
     }
@@ -68,21 +25,73 @@
         background-color: rgba(0,0,0,0.01)
       }
       .popup{
-        position: absolute;
+        position: relative;
         background-color: white;
-        min-height: 500px;
-        min-width: 600px;
-        width: 30%;
-        left: 50%;
-        top: 50%;
-        transform:translate(-50%,-50%);
+        width: min(700px, 100%);
+        max-height: calc(100vh - 32px);
+        overflow-y: auto;
+        box-sizing: border-box;
         border-radius: 8px;
-      
+        z-index:2000;
        
+      }
+      .popup .title{
+        margin: 12px 16px;
+        padding-bottom: 10px;
+      }
+      .popup .title span{
+        font-size: 22px;
+      }
+      .popup form{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 16px;
+        padding: 0 16px 12px;
+      }
+      .popup .input_container{
+        min-width: 0;
+      }
+      .popup .input_container label{
+        margin-left: 0;
+      }
+      .popup .input_container input{
+        box-sizing: border-box;
+        margin: 4px 0;
+      }
+      .popup .input_container textarea{
+        box-sizing: border-box;
+        min-height: 48px;
+        margin: 4px 0;
+        padding: 8px;
+        font-size: 14px;
+      }
+      .popup .input_container textarea::placeholder{
+        font-size: 14px;
+      }
+      .popup .cancel_save_button{
+        grid-column: 1 / -1;
+        margin-top: 4px;
+      }
+      .popup .cancel_save_button .submit_button,
+      .popup .submit_cancel_button{
+        margin: 10px 8px;
+      }
+      @media (max-width: 520px){
+        .popup form{
+          grid-template-columns: 1fr;
+        }
+        .popup .cancel_save_button{
+          grid-column: 1;
+        }
       }
       .overlay {
           position: fixed;
           inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+          box-sizing: border-box;
           background-color: rgba(0, 0, 0, 0.5);
           z-index: 1000;
           opacity: 0;
@@ -257,17 +266,17 @@
       .inventoryTitle{
         display: flex;
         justify-content: space-between;
-        padding: 0 50px 0 20px;
+        padding: 0 50px 0 5px;
         align-items: center;
+        margin-top: -25px;
       }
       .inventoryTitle_first{
         display: flex;
-        ;
-        
       }
       .inventoryTitle_first i{
         font-size: 35px;
-        transform: translateY(10px);
+        /* transform: translateY(10px); */
+        margin-top:10px
       }
       .inventoryTitle_first div{
         display: flex;
@@ -286,16 +295,16 @@
       .status {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 20px;
+        column-gap:5px;
         margin-right: 20px;
-        margin-top: 40px;
+        margin-top: 10px;
       }
       .status .updates{
         display: flex;
         position:relative;
         background-color: blue;
         padding: 50px 0;
-        min-height: 25px;
+        min-height: 20px;
         border-radius: 8px;
       }
       .status .updates div:last-child{
@@ -303,11 +312,11 @@
         flex-direction: column;
         position:absolute;
         left: 100px;
-        top: 30px;
+        top: 25px;
       }
       .status .updates div i{
         color: blue;
-        font-size: 35px;
+        font-size: 30px;
         position:absolute;
         top: 27px;
         left: 30px;
@@ -316,7 +325,7 @@
         padding: 7px 5px;
       }
       .status .updates div .number{
-        font-size: 30px;
+        font-size: 20px;
         font-weight: bold;
       }
       
@@ -331,10 +340,10 @@
         border-radius: 7px;
         margin-right: 20px;
         box-shadow:0px 1px 8px rgba(0, 0, 0, 0.3);
-        padding: 20px 30px;
+        padding: 10px 30px;
         display: grid;
-        column-gap: 50px;
-        margin-top: 20px;
+        column-gap: 10px;
+        margin-top: 10px;
         grid-template-columns: 5fr 1fr 1fr;
       }
       .search .select-suppliers{
@@ -366,7 +375,7 @@
         border: 2px solid #ccc;
         gap: 10px;
         align-items: center;
-        padding: 10px;
+        padding: 5px;
         border-radius:7px ;
       }
       .search-button input{
@@ -377,7 +386,7 @@
         color: #1b0707;
       }
       .search-button input::placeholder{
-        font-size: 15px;
+        font-size: 14px;
       }
       .search-button i {
         color: #888;
@@ -386,7 +395,7 @@
         border:2px solid rgba(222, 226, 230);
         margin-right: 20px;
         padding:10px 20px;
-        margin-top: 30px;
+        margin-top: 15px;
         background-color: white;
 
       }
@@ -394,18 +403,19 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+       margin-top: -5px;
         
       }
       .recent-inventory-table .recent-title div:first-child{
         font-weight: 700;
-        font-size: 25px;
+        font-size: 20px;
       }
       .recent-inventory-table .recent-title div:last-child{
         transform: translateY(6px);
       }
       .inventoryTitle_second label span{
          background-color: rgba(14, 113, 229);
-         padding: 13px 30px;
+         padding: 10px 20px;
          color: white;
          border-radius: 7px;
          font-weight: 600;
@@ -423,39 +433,48 @@
         pointer-events:auto;
       }
       .recent-inventory-table .table{
-        margin-top: 20px;
+        margin-top: 17px;
         border: 2px solid rgba(222, 226, 230);
         border-radius: 7px;
         padding: 10;
+        text-align: center;
       }
       .recent-inventory-table .table tbody tr {
-        height: 50px; 
+        /* height: 40px;  */
       }
       .recent-inventory-table .table tbody tr td{
-        text-align: left;
+        /* text-align: left; */
       }
       .recent-inventory-table .table thead tr th{
         background-color:rgba(237, 243, 249);
+      }
+      .recent-inventory-table .last-part{
+        display: flex;
+        justify-content: space-between;
+        margin-top: -13px;
+      }
+      .low_stock_item,
+      .out_of_stock,
+      .in_stock{
+        display: inline-block;
+        transform: translateY(0px);
       }
       .low_stock_item{
         background-color:rgb(254, 237, 202);
         color: rgb(199, 116, 43);
         padding: 7px 20px;
-        top: 5px;
         border-radius: 20px;
       }
       .out_of_stock{
         background-color: rgb(253, 221, 222);
         color: rgb(220, 80, 77);
         padding: 7px 20px;
-        top: 5px;
         border-radius: 20px;
       }
       .in_stock{
         background-color:rgb(207, 238, 220);
         padding: 5px 20px;
         border-radius: 20px;
-        top: 10px;
         color: rgb(54, 121, 68);
       }
       .action_header{

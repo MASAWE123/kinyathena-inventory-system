@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-h&vf9y$pqa1p%(t=*5!hvwr%d#z-7yf2r7*nw+2*u2uz_(b7j#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['kinyathena-inventory-system-production.up.railway.app','https://kinyathena-inventory-system-production.up.railway.app']
+ALLOWED_HOSTS = ['kinyathena-inventory-system-production.up.railway.app','https://kinyathena-inventory-system-production.up.railway.app','127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://kinyathena-inventory-system-production.up.railway.app']
 
 # Application definition

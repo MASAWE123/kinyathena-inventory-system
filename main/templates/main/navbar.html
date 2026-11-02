@@ -1,12 +1,13 @@
 <style>
 .sidebar{
   position: fixed;
-  width: 300px;
+  width: 200px;
   top:60px;
   left: 0px;
   bottom: 0px;
   background-color: rgb(14, 39, 68);
   color: white;
+  z-index: 1000;
 }
 .sidebar .nav-sidebar{
   position: relative;
@@ -16,19 +17,22 @@
   /* background-color: red; */
 }
 .sidebar .nav-sidebar label{
+  display: block;
+
   flex: 1;
   display: flex;
   align-items: center;
   border-radius: 10px;
   margin-bottom: 5px;
 }
+
 .sidebar .nav-sidebar label:hover{
   background-color: rgba(255, 255, 255, 0.2);;
 }
 .sidebar .nav-sidebar label i{
   margin-right: 14px;
-  margin-left: 60px;
-  font-size:25px;
+  margin-left: 20px;
+  font-size:20px;
 }
 .slider{
   position: absolute;
