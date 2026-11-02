@@ -4,13 +4,15 @@ body{
   box-sizing: border-box;
   background-color: rgba(0,0,0,0.2)
 }
-html {
-  scrollbar-width: none;      
-  -ms-overflow-style: none;   
+html,
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-html::-webkit-scrollbar {
-  display: none;             
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 .header{
   display: flex;
@@ -164,4 +166,3 @@ main .Stock{
   font-size: 20px;
   font-weight: 700;
 }
-

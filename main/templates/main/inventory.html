@@ -27,12 +27,13 @@
       .popup{
         position: relative;
         background-color: white;
-        width: min(700px, 100%);
+        width: min(500px, 100%);
         max-height: calc(100vh - 32px);
         overflow-y: auto;
         box-sizing: border-box;
         border-radius: 8px;
         z-index:2000;
+        margin-top:50px
        
       }
       .popup .title{
@@ -44,9 +45,10 @@
       }
       .popup form{
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr;
         gap: 8px 16px;
         padding: 0 16px 12px;
+      
       }
       .popup .input_container{
         min-width: 0;
@@ -76,10 +78,11 @@
       .popup .submit_cancel_button{
         margin: 10px 8px;
       }
+      .popup .cancel_save_button .submit_button{
+        outline: none;
+        border: none;
+      }
       @media (max-width: 520px){
-        .popup form{
-          grid-template-columns: 1fr;
-        }
         .popup .cancel_save_button{
           grid-column: 1;
         }
@@ -120,20 +123,19 @@
         margin-right: 20px;
         transform: translateY(7px);
       }
-      .title div label{
-        width: 50px;
-        height: 50px;
-        margin-right: 20px;
-        
+      .popup .title div label{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
       }
      
-      .title div label i{
-        width: 100%;
-        height: 100%;
-        font-size: 20px;
+      .popup .title div label i{
+        font-size: 14px;
         color: #888;
         cursor: pointer;
-        transform: translateY(13px);
       
       }
       .title div label:hover{
@@ -344,7 +346,7 @@
         display: grid;
         column-gap: 10px;
         margin-top: 10px;
-        grid-template-columns: 5fr 1fr 1fr;
+        grid-template-columns: 5fr 2fr;
       }
       .search .select-suppliers{
         display: flex;
@@ -366,6 +368,7 @@
       }
       .search .select-statuses #statuses{
         width: 100%;
+        height: 100%;
         border: none;
         outline: none;
         background-color: inherit;
@@ -397,6 +400,7 @@
         padding:10px 20px;
         margin-top: 15px;
         background-color: white;
+        margin-bottom: 20px;
 
       }
       .recent-inventory-table .recent-title{
@@ -580,34 +584,30 @@
       </div>
 
     </div>
-    
-
-    <div class="search">
+     
+    <form action="{% url 'stock' %}" method="GET">
+      <div class="search">
 
        <div class="search-button">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Search Items by name,supplier">
+        <input type="text" placeholder="Search Items by name,supplier" name="q" id="search">
        </div>
 
-       <div class="select-suppliers">
-        <select name="suppliers" id="suppliers">
-          <option value="all" selected disabled>All Suppliers</option>
-          <option value="">Abc</option>
-          <option value="">Pipes</option>
-          <option value="">Masawe</option>
-        </select>
-       </div>
-     
       <div class="select-statuses">
-        <select name="statuses" id="statuses" >
-          <option value="" selected disabled>All Statuses</option>
-          <option value="">Abc</option>
-          <option value="">Pipes</option>
-          <option value="">Masawe</option>
+        <select name="status" id="statuses" onchange="this.form.submit()">
+          <option value=""
+          {% if not selected_status %}selected{% endif %}>All Statuses</option>
+          <option value="low_stock"
+          {% if selected_status == 'low_stock' %}selected{% endif %}>Low Stock</option>
+          <option value="inStock"
+          {% if selected_status == 'inStock' %}selected{% endif %}>In Stock</option>
+          <option value="outStock"
+          {% if selected_status == 'outStock' %}selected{% endif %}>Out of Stock</option>
         </select>
       </div>
   
     </div>
+    </form>
 
     <div class="recent-inventory-table">
       <div class="recent-title">
@@ -701,57 +701,39 @@
               </div>
           
    
-         <form action="{% url 'purchase' %}" method="POST">
+         <form action="{% url 'stock' %}" method="POST">
+           {% csrf_token %}
                
                   <div class="input_container">
                     <label for="supplier">Item Name  <span>*</span></label>
-                    <input type="text" placeholder="Enter item name(e.g Pipes,Meters)" id="supplier" name="supplier">
+                    <input type="text" placeholder="Enter item name(e.g Pipes,Meters)" id="item_name" name="item_name" required>
                   </div>
 
                   <div class="input_container">
-                    <label for="supplier">Supplier <span>*</span></label>
-                    <input type="text" placeholder="Enter Supplier" id="supplier" name="supplier">
+                    <label for="supplier">Supplier/Entered By <span>*</span></label>
+                    <input type="text" placeholder="Enter Supplier Name/Enter the name of the person" id="supplier" name="supplier" required>
                   </div>
                   <div class="input_container">
-                    <label for="supplier">Initial Quantity <span>*</span></label>
-                    <input type="text" placeholder="Enter Supplier" id="supplier" name="supplier" value="0">
+                    <label for="supplier">Quantity <span>*</span></label>
+                    <input type="text" placeholder="Enter Quantity" id="quantity" name="quantity" value="0" required>
                   </div>
-              
-                  <div class="input_container">
-                    <label for="supplier">Minimum Stock Level</label>
-                    <input type="text" placeholder="Enter Supplier" id="supplier" name="supplier" value="0">
-                  </div>
-              
-                  <div class="input_container">
-                    <label for="supplier">Unit</label>
-                    <input type="text" placeholder="Select Unit(optional)" id="supplier" name="supplier">
-                  </div>
-              
+                  
                   <div class="input_container">
                     <label for="supplier">Description (Optional)</label>
                     <textarea name="" id="" placeholder="Enter Item description (optional)"></textarea>
                   </div>
-              
-              
-              
-                  
-  
-                 
-            
-              
-           
       
                 <div class="cancel_save_button">
                   <label for="check">
                     <span  class="submit_cancel_button">Cancel</span>
                   </label>
-                  <span  class="submit_button" >
+                  <button  class="submit_button" type="submit">
                     <i class="fa-regular fa-floppy-disk"></i>
                     Save Item
-                  </span>
+                  </button>
                 </div>
             </div>
-        </form>
+          </form>
 
 
 
@@ -759,32 +741,6 @@
         </div>
       </div>
   
-      <script>
-        const addItem = document.getElementById('addItem');
-        const itemRows = document.getElementById('itemRows');
-        
-        
-        addItem.addEventListener('click',function(){
-          const newRow = document.createElement('div')
-          newRow.classList.add('item-row');
-          newRow.innerHTML = `
-                  <input type="text" name = 'item' required class="itemName" placeholder="Enter item">
-                  <input type="number" name = 'quantity' required  class="itemquantity" placeholder="Enter quantity">
-                  <i class="fa-solid fa-trash-can delete-item"></i>`;
-          itemRows.appendChild(newRow);
-          
-        });
-  
-        itemRows.addEventListener('click', function(event) {
-  
-        if (event.target.classList.contains('delete-item')) {
-  
-            event.target.parentElement.remove();
-  
-        }
-  
-        });
-      </script>
   
 
 {% endblock content %}

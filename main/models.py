@@ -57,6 +57,7 @@ class Stock(models.Model):
 class StockIn(models.Model):
     item = models.CharField(max_length=200)
     quantity = models.PositiveIntegerField()
+    supplier = models.CharField(max_length=200,null=True,blank=True)
     date_received = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -65,7 +66,8 @@ class StockIn(models.Model):
 class StockOut(models.Model):
   item  = models.CharField(max_length=200,null=True)
   quantity = models.PositiveIntegerField(default=0)
-  reason = models.CharField(max_length=200)
+  supplier_issued_to = models.CharField(max_length=200,null=True,blank=True)
+  reason = models.CharField(max_length=200,null=True,blank=True)
   Notes = models.CharField(max_length=500,null=True,blank=True)
 
 class StockMovements(models.Model):

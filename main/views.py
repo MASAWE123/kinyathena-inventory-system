@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import supplierItems,Suppliers,Purchase,PurchaseItem,Stock,StockIn,StockOut,StockMovements,assets
 from django.utils import timezone
+from django.db.models import Q
 
 # Create your views here.
 def home(request):
@@ -116,10 +117,56 @@ def receive(request,purchase_id):
   return render(request,'main/receive.html',context)
 
 def stock(request):
-  stock = Stock.objects.all().order_by('-id')[:10]
-  asset = assets.objects.all()
-  stock_count = stock.count()
-  context = {'stocks':stock,'stock_count':stock_count,'asset':asset}
+  if request.method == 'POST':
+    item_name = (request.POST.get('item_name') or '').strip()
+    quantity = request.POST.get('quantity')
+    supplier = (request.POST.get('supplier') or '').strip()
+
+    if not item_name or not quantity:
+      return redirect('stock')
+
+    item_stock, created = Stock.objects.get_or_create(item=item_name)
+    item_stock.quantity += int(quantity)
+    stock_asset = assets.objects.filter(item=item_name).first()
+
+    if item_stock.quantity == 0:
+      item_stock.status = 'outStock'
+    elif stock_asset and item_stock.quantity <= stock_asset.limit_quantity:
+      item_stock.status = 'low_stock'
+      item_stock.low_stock_date = timezone.now()
+      item_stock.low_by = stock_asset.limit_quantity - item_stock.quantity
+    else:
+      item_stock.status = 'inStock'
+    item_stock.save()
+
+    StockIn.objects.create(
+      item=item_name,
+      quantity=int(quantity),
+      supplier=supplier or None,
+    )
+    return redirect('stock')
+
+  stock_query = Stock.objects.all()
+  search_query = request.GET.get('q', '').strip()
+  selected_status = request.GET.get('status', '')
+  if search_query:
+    stock_query = stock_query.filter(
+      Q(item__icontains=search_query) | Q(quantity__icontains=search_query)
+      )
+  selected_status = request.GET.get('status', '')
+  if selected_status in dict(Stock.stock_status):
+    stock_query = stock_query.filter(status=selected_status)
+
+  stock_count = stock_query.count()
+  stocks = stock_query.order_by('-id')[:10]
+  asset_limits = assets.objects.all()
+  context = {
+    'stocks': stocks,
+    'stock_count': stock_count,
+    'asset': asset_limits,
+    'search_query': search_query,
+    'selected_status': selected_status,
+  }
   return render(request,'main/inventory.html',context)
 
 def stockOut(request,stockid):
