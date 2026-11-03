@@ -98,13 +98,11 @@
           background-color: rgba(0, 0, 0, 0.5);
           z-index: 1000;
           opacity: 0;
+          visibility: hidden;
           transition: all ease 0.3s;
           pointer-events: none;
       }
-      .addPurchase:has(#check:checked) ~ .overlay{
-        opacity: 1;
-        pointer-events: auto;
-      }
+     
       .title{
         display: flex;
         align-items: center;
@@ -575,9 +573,9 @@
     </div>
     </form>
 
-    <div class="recent-inventory-table">
+    <div class="recent-inventory-table" id="recent-inventory-table">
       <div class="recent-title">
-        <div><a class="current-stock-link" href="{% url 'stock' %}?q=">Current Stock</a></div>
+        <div><a class="current-stock-link" href="{% url 'stock' %}?q=#recent-inventory-table">Current Stock</a></div>
         
         <div class="inventoryTitle_second">
           <input type="checkbox" id="check">
@@ -666,11 +664,9 @@
         </nav>
         </div>
     
-             
-      
-
-
+      </div>
     </div>
+
       
       <div class="overlay">
         <div class="popup">

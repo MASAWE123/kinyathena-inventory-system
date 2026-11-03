@@ -148,7 +148,7 @@ def stock(request):
     )
   
 
-  stock_query = Stock.objects.all()
+  stock_query = Stock.objects.all().order_by('-id')
 
   search_query = request.GET.get('q', '').strip()
   if search_query:
@@ -166,7 +166,7 @@ def stock(request):
   stocks = stock_query.order_by('-id')
   asset_limits = assets.objects.all()
 
-  paginator = Paginator(stock_query,5)  
+  paginator = Paginator(stock_query,7)  
   page_number = request.GET.get('page')
   page_obj = paginator.get_page(page_number)
   context = {
