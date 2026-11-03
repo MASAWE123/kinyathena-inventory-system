@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from .models import supplierItems,Suppliers,Purchase,PurchaseItem,Stock,StockIn,StockOut,StockMovements,assets
 from django.utils import timezone
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 # Create your views here.
 def home(request):
@@ -148,8 +149,8 @@ def stock(request):
   
 
   stock_query = Stock.objects.all()
+
   search_query = request.GET.get('q', '').strip()
-  selected_status = request.GET.get('status', '')
   if search_query:
     stock_query = stock_query.filter(
       Q(item__icontains=search_query) | Q(quantity__icontains=search_query)
@@ -164,6 +165,10 @@ def stock(request):
   out_stock_count = Stock.objects.filter(status='outStock').count()
   stocks = stock_query.order_by('-id')
   asset_limits = assets.objects.all()
+
+  paginator = Paginator(stock_query,5)  
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
   context = {
     'stocks': stocks,
     'stock_count': stock_count,
@@ -173,6 +178,7 @@ def stock(request):
     'low_stock_count': low_stock_count,
     'in_stock_count': in_stock_count,
     'out_stock_count': out_stock_count,
+    'page_obj':page_obj,
   }
   return render(request,'main/inventory.html',context)
 

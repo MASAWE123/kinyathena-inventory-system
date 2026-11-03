@@ -385,11 +385,12 @@
         width: 100%;
         border: none;
         outline: none;
-        font-size: 20px;
-        color: #1b0707;
+        font-size: 16px;
+        color: #4e4b4b;
       }
       .search-button input::placeholder{
         font-size: 14px;
+        transform: translateY(-2px);
       }
       .search-button i {
         color: #888;
@@ -461,6 +462,10 @@
         display: flex;
         justify-content: space-between;
         margin-top: -13px;
+        align-items: center;
+      }
+      .recent-inventory-table .last-part .action{
+       transform: translateY(15px);
       }
       .low_stock_item,
       .out_of_stock,
@@ -581,7 +586,7 @@
           </label>
         </div>
       </div>
-      <table class="table">
+      <table class="table" id="inventory-table">
         <thead>
           <tr>
             <th  scope="col">#</th>
@@ -594,7 +599,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for item in stocks %}
+          {% for item in page_obj.object_list %}
           
           <tr>
             <th scope="row">{{item.id}}</th>
@@ -638,13 +643,33 @@
 
       <div class="last-part">
         <div class="last-part-start">
-          Showing 1 to 10 of 24 items
+          Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} pages
         </div>
 
         <div class="action">
-          
+        <nav aria-label="...">
+            <ul class="pagination">
+              {% if page_obj.has_previous %}
+              <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}#inventory-table" class="page-link">Previous</a></li>
+              {% endif %}
+              {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                  <li class="page-item active"><a class="page-link" href="?page={{ num }}#inventory-table">{{ num }}</a></li>
+                {% else %}
+                  <li class="page-item"><a class="page-link" href="?page={{ num }}#inventory-table">{{ num }}</a></li>
+                {% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}#inventory-table">Next</a></li>
+              {% endif %}
+            </ul>
+        </nav>
         </div>
-      </div>
+    
+             
+      
+
+
     </div>
       
       <div class="overlay">
