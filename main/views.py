@@ -1,3 +1,4 @@
+
 from django.shortcuts import render,redirect
 from .models import supplierItems,Suppliers,Purchase,PurchaseItem,Stock,StockIn,StockOut,StockMovements,assets
 from django.utils import timezone
@@ -144,7 +145,7 @@ def stock(request):
       quantity=int(quantity),
       supplier=supplier or None,
     )
-    return redirect('stock')
+  
 
   stock_query = Stock.objects.all()
   search_query = request.GET.get('q', '').strip()
@@ -158,7 +159,10 @@ def stock(request):
     stock_query = stock_query.filter(status=selected_status)
 
   stock_count = stock_query.count()
-  stocks = stock_query.order_by('-id')[:10]
+  low_stock_count = Stock.objects.filter(status='low_stock').count()
+  in_stock_count = Stock.objects.filter(status='inStock').count()
+  out_stock_count = Stock.objects.filter(status='outStock').count()
+  stocks = stock_query.order_by('-id')
   asset_limits = assets.objects.all()
   context = {
     'stocks': stocks,
@@ -166,6 +170,9 @@ def stock(request):
     'asset': asset_limits,
     'search_query': search_query,
     'selected_status': selected_status,
+    'low_stock_count': low_stock_count,
+    'in_stock_count': in_stock_count,
+    'out_stock_count': out_stock_count,
   }
   return render(request,'main/inventory.html',context)
 
