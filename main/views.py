@@ -233,4 +233,4 @@ def stockOut(request,stockid):
       return redirect('stock')
 
 
-  return render(request,'main/stockout.html')
+  return render(request,'main/stock_Out.html')

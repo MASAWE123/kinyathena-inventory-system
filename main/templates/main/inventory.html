@@ -493,11 +493,16 @@
         display: flex;
         justify-content: center;
       }
-      .action{
+      .Action{
           display: flex;
           justify-content: center;
           column-gap: 10px;
       }
+      .Action  a{
+       width:100px;
+      }
+     
+      
       </style>
 
   
@@ -623,14 +628,17 @@
               <span class="in_stock">{{item.status}}</span>
             </td>
             {% endif %}
-            <td class="action">
-               <button type="button" class="btn btn-primary">
+            <td class="Action">
+               <a type="button" class="btn btn-primary" href="{% url 'stockout' item.id %}">
                  Stock Out
-               </button>
+              
+               </a>
 
-               <button type="button" class="btn btn-outline-primary">
+               <a type="button" class="btn btn-outline-primary">
                  Stock In
-               </button>
+               </a>
+             
+              
             </td>
           
           </tr>

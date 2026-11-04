@@ -107,7 +107,7 @@ a{
 <input type="radio" id="dashboard" name="radio" 
 {% if request.resolver_match.url_name == 'home' %}checked {% endif %}>
  <input type="radio"  name="radio" id="inventory"
- {% if request.resolver_match.url_name == 'stock' %}checked {% endif %}>
+ {% if request.resolver_match.url_name == 'stock' or request.resolver_match.url_name == 'stockout' %}checked {% endif %}>
  <input type="radio" name="radio" id="stockin">
  <input type="radio" name="radio" id="purchases">
  <input type="radio" name="radio" id="suppliers">
