@@ -199,30 +199,31 @@
 
     <div class="info">
         <div class="first_part">
-            <div class="icon"><i class="fa-solid fa-cube"></i></div> <span class="item_Name">5metre</span>
+            <div class="icon"><i class="fa-solid fa-cube"></i></div> <span class="item_Name">{{ stock.item }}</span>
         </div>
         <div class="second_part">
             <div class="available_Stock">
                 <i class="fa-solid fa-layer-group"></i> Available Stock:
             </div>
-            <div class="number">7</div>
+            <div class="number">{{ stock.quantity }}</div>
         </div>
     </div>
-
-    <div class="quantity">
+    <form action="{% url 'stockout' stock.id %}" method="POST">
+    {% csrf_token %}
+      <div class="quantity">
         <label for="quantity">Quantity to Stock Out <span>*</span></label>
-        <input type="number" id="quantity" name="quantity" value="0" min="1" max="7">
-        <div class="more_info">Enter the quantity to be taken out of stock.(Available: 7)</div>
-    </div>
+        <input type="number" id="quantity" name="quantity" value="0" min="1" max="{{ stock.quantity }}">
+        <div class="more_info">Enter the quantity to be taken out of stock.(Available: {{ stock.quantity }})</div>
+      </div>
 
       <div class="reason">
         <label for="reason">Reason for Stock Out <span>*</span></label>
         <input type="text" id="reason" name="reason" placeholder="Enter reason for stock out">
       </div>
 
-     <div class="note">
+      <div class="note">
        <label for="note">Notes(Optional) </label>
-       <textarea id="note" name="note" rows="4" placeholder="Enter any additional notes or comments...."></textarea>
+       <textarea id="note" name="notes" rows="4" placeholder="Enter any additional notes or comments...."></textarea>
       </div>
 
       <div class="submit">
@@ -230,7 +231,7 @@
         <button type="submit" class="btn btn-primary">
             <span><i class="fa-solid fa-arrow-up-from-bracket"></i></span>Stock Out
         </button>
-
-</div>
+      </div>
+     </form>
 </div>
 {% endblock %}

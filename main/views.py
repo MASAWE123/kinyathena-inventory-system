@@ -204,12 +204,7 @@ def stockOut(request,stockid):
 
       stock.quantity -= int(quantity)
       stock.save()
-      stockOut.create(
-        item = stock.item.strip(),
-        quantity=int(quantity),
-        reason=str(reason),
-        Notes =str(notes),
-      )
+      
       
       if stock.quantity == 0:
         stock.status = 'outStock'
@@ -231,6 +226,58 @@ def stockOut(request,stockid):
           reason=str(reason)
     )
       return redirect('stock')
+  context = {
+    'stock':stock,
+  }
+
+  return render(request,'main/stock_Out.html',context)
+
+def stockInPrompt(request,stockid):
+  stock = Stock.objects.get(id=stockid)
+  stockmovement = StockMovements.objects.all()
+  stockOut = StockOut.objects.all()
+  asset = assets.objects.filter(item=stock.item.strip()).first()
 
 
-  return render(request,'main/stock_Out.html')
+  if request.method == 'POST':
+      quantity = request.POST.get('quantity')
+      reason = request.POST.get('reason')
+      notes = request.POST.get('notes')
+
+      if  not int(quantity):
+        print('there is nothing')
+        return redirect('stock')
+      elif int(quantity) <= 0:
+        print('the value cannot be less than or equal to zero')
+        return redirect('stock')
+    
+
+      stock.quantity += int(quantity)
+      stock.save()
+     
+      
+      if stock.quantity == 0:
+        stock.status = 'outStock'
+      elif asset and stock.quantity <= asset.limit_quantity:
+        stock.status = 'low_stock'
+        stock.low_stock_date = timezone.now()
+        lowby = asset.limit_quantity - stock.quantity
+        stock.low_by = lowby
+      else:
+        stock.status = 'inStock'
+      stock.save()
+
+
+
+      StockMovements.objects.create(
+          item=stock.item,
+          quantity = int(quantity),
+          movement = 'In',
+          reason=str(reason)
+    )
+      return redirect('stock')
+  context = {
+    'stock':stock,
+  }
+
+  return render(request,'main/stockinprompt.html',context)

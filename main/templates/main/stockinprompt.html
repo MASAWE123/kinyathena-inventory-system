@@ -1,0 +1,237 @@
+{% extends 'main/base.html' %}
+{% block content %}
+  <style>
+    body {
+        background-color: rgb(245, 245, 245);
+    }
+    a {
+      text-decoration: none;
+    }
+    .backButton {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: auto;
+      height: auto;
+      padding: 8px 16px;
+      margin: 20px;
+      background-color: rgb(245, 245, 245);
+      color:black  ;
+      border: 2px solid rgb(222, 228, 237);
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .backButton i {
+      font-size: 16px;
+    }
+    .stockIn{
+        font-size: 20px;
+        font-weight: bold;
+        margin-left: 20px;
+    }
+    .stockIn i{
+       font-size: 25px;
+       margin-right: 10px;
+    }
+    
+    .mainArea {
+      margin: 20px;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .mainArea .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      border: 1px solid rgb(231, 239, 252);
+      border-radius: 8px;
+      min-height: 120px;
+      box-sizing: border-box;
+      background-color: #f9f9f9;
+    }
+    .mainArea .info .first_part {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mainArea .info .first_part .icon {
+      font-size: 30px;
+      margin-left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgb(213, 231, 254);
+      color: rgb(8, 96, 200);
+      border-radius:8px;
+    }
+    .info .first_part .icon i {
+        color: rgb(8, 96, 200);
+        font-size: 30px;
+        margin: 10px 8px;
+        
+    }
+     .info .first_part .item_Name {
+      font-size: 25px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .info .second_part {
+      margin-top: 0;
+      /* text-align: right; */
+      margin-right:100px;
+    }
+    .info .second_part .available_Stock {
+        font-size: 14px;
+        margin-right: 0;
+        color: rgb(106, 128, 158)
+    }
+    .info .second_part .available_Stock i {
+        margin-right: 10px;
+        font-size: 16px;
+    }
+    .info .second_part .number {
+         /* display: inline-block; */
+         margin-left: 30px;
+         margin-top: 5px;
+       
+         background-color:rgb(217, 233, 253);
+         padding: 5px 170px 5px 10px;
+         border-radius: 5px;
+    }
+    .reason{
+        margin-top: 40px;
+    }
+    .reason,
+    .quantity {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+    .reason label,
+    .quantity label {
+      font-size: 14px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .reason label span,    
+    .quantity label span {
+      color: red;
+    }
+    .reason input,
+    .quantity input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      font-size: 14px;
+      border:1px solid #888;
+      outline: none;
+      border-radius: 4px;
+    }
+    .quantity .more_info {
+      font-size: 12px;
+      color: #666;
+      margin-top: 8px;
+    }
+    .note {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+    .note label {
+      font-size: 14px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+   .note textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      font-size: 14px;
+      border:1px solid #aaa;
+      outline: none;
+      border-radius: 4px;
+      resize: vertical;
+    }
+    .note textarea::placeholder {
+      color: #aaa;
+    }
+    .submit {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .submit button:last-child {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .submit a{
+        width: auto;
+        height: auto;
+        color:black;
+        font-size: 14px;
+        font-weight: bold;
+        border: 1px solid rgb(222, 228, 237);
+    }
+
+    
+  </style>
+
+<a class="backButton btn btn-outline-primary" href="{% url 'stock' %}">
+    <i class="fa-solid fa-arrow-left"></i> Back to Stock
+</a>
+ <div class="stockIn">
+    <i class="fa-solid fa-download"></i> Stock In
+ </div>
+
+<div class="mainArea">
+
+    <div class="info">
+        <div class="first_part">
+            <div class="icon"><i class="fa-solid fa-cube"></i></div> <span class="item_Name">{{ stock.item }}</span>
+        </div>
+        <div class="second_part">
+            <div class="available_Stock">
+                <i class="fa-solid fa-layer-group"></i> Available Stock:
+            </div>
+            <div class="number">{{ stock.quantity }}</div>
+        </div>
+    </div>
+    <form action="{% url 'stockinprompt' stock.id %}" method="POST">
+    {% csrf_token %}
+      <div class="quantity">
+        <label for="quantity">Quantity to Stock In <span>*</span></label>
+        <input type="number" id="quantity" name="quantity" value="0" min="1">
+        <div class="more_info">Enter the quantity to be added to stock.(Available: {{ stock.quantity }})</div>
+      </div>
+
+      <div class="reason">
+        <label for="reason">Reason for Stock In <span>*</span></label>
+        <input type="text" id="reason" name="reason" placeholder="Enter reason for stock in">
+      </div>
+
+      <div class="note">
+       <label for="note">Notes(Optional) </label>
+       <textarea id="note" name="notes" rows="4" placeholder="Enter any additional notes or comments...."></textarea>
+      </div>
+
+      <div class="submit">
+        <a href="{% url 'stock' %}" class="btn btn-outline-primary">Cancel</a>
+        <button type="submit" class="btn btn-primary">
+            <span><i class="fa-solid fa-download"></i></span>Stock In
+        </button>
+      </div>
+     </form>
+</div>
+{% endblock %}

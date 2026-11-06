@@ -107,7 +107,7 @@ a{
 <input type="radio" id="dashboard" name="radio" 
 {% if request.resolver_match.url_name == 'home' %}checked {% endif %}>
  <input type="radio"  name="radio" id="inventory"
- {% if request.resolver_match.url_name == 'stock' or request.resolver_match.url_name == 'stockout' %}checked {% endif %}>
+ {% if request.resolver_match.url_name == 'stock' or request.resolver_match.url_name == 'stockout'  %}checked {% endif %}>
  <input type="radio" name="radio" id="stockin">
  <input type="radio" name="radio" id="purchases">
  <input type="radio" name="radio" id="suppliers">
@@ -128,11 +128,11 @@ a{
   </label>
 
   <label for="stockin">
-    <i class="fa-solid fa-download"></i></i>Stock in
+    <i class="fa-solid fa-clock-rotate-left"></i>Movements
   </label>
 
   <label for="purchases">
-    <i class="fa-solid fa-cart-shopping"></i></i>Purchases
+    <i class="fa-solid fa-cart-shopping"></i>Purchases
   </label>
 
   <label for="suppliers">
