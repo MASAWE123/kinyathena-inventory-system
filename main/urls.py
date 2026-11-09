@@ -10,4 +10,5 @@ urlpatterns = [
   path('stock',views.stock,name = 'stock'),
   path('stock/<str:stockid>',views.stockOut,name='stockout'),
   path('stockinprompt/<str:stockid>',views.stockInPrompt,name='stockinprompt'),
+  path('stockmovements/',views.stockMovements,name='stockmovements'),
 ]

@@ -4,6 +4,7 @@ from .models import supplierItems,Suppliers,Purchase,PurchaseItem,Stock,StockIn,
 from django.utils import timezone
 from django.db.models import Q
 from django.core.paginator import Paginator
+from datetime import timedelta
 
 # Create your views here.
 def home(request):
@@ -222,6 +223,7 @@ def stockOut(request,stockid):
       StockMovements.objects.create(
           item=stock.item,
           quantity = int(quantity),
+          supplier_issued_to = request.user.username,
           movement = 'Out',
           reason=str(reason)
     )
@@ -272,6 +274,7 @@ def stockInPrompt(request,stockid):
       StockMovements.objects.create(
           item=stock.item,
           quantity = int(quantity),
+          supplier_issued_to = request.user.username,
           movement = 'In',
           reason=str(reason)
     )
@@ -281,3 +284,45 @@ def stockInPrompt(request,stockid):
   }
 
   return render(request,'main/stockinprompt.html',context)
+
+def stockMovements(request):
+  stock_movements = StockMovements.objects.all().order_by('-id')
+  today = timezone.localdate()
+  start_of_week = today - timedelta(days=today.weekday())
+  stock_movements_counts = stock_movements.count()
+  today_count = stock_movements.filter(date__date=today).count()
+  this_week_movements = stock_movements.filter(date__date__gte=start_of_week, date__date__lte=today).count()
+  this_month_movements = stock_movements.filter(date__date__month=today.month, date__date__year=today.year).count()
+  search_stock_movements = request.GET.get('q','').strip()
+  if search_stock_movements:
+    stock_movements= stock_movements.filter(
+      Q(item__icontains=search_stock_movements)|
+      Q(movement__icontains=search_stock_movements)
+    )
+  selected_status = request.GET.get('status','').strip()
+
+  if selected_status == 'Today':
+   stock_movements = stock_movements.filter(date__date=today)
+  elif selected_status == 'This Week':
+    stock_movements = stock_movements.filter(date__date__gte=start_of_week, date__date__lte=today)
+  elif selected_status == 'This Month':
+   stock_movements = stock_movements.filter(date__date__month=today.month, date__date__year=today.year)
+  
+ 
+
+
+  paginator = Paginator(stock_movements, 7) 
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+
+  context = {
+    'stock_movements': stock_movements,
+    'page_obj': page_obj,
+    'today_count':today_count,
+    'this_week_movements': this_week_movements,
+    'this_month_movements': this_month_movements,
+    'stock_movements_counts':stock_movements_counts,
+    'selected_status':selected_status,
+    'search_stock_movements':search_stock_movements
+  }
+  return render(request, 'main/stock_movements.html', context)

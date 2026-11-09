@@ -77,6 +77,7 @@ class StockMovements(models.Model):
   ]
   item = models.CharField(max_length=200)
   quantity = models.PositiveIntegerField()
+  supplier_issued_to = models.CharField(max_length=200,null=True,blank=True)
   date=models.DateTimeField(auto_now_add=True)
   movement = models.CharField(max_length=200,choices=Movement_type)
   reason = models.CharField(max_length=300,null=True,blank=True)

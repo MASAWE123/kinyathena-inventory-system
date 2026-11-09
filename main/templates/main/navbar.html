@@ -107,8 +107,9 @@ a{
 <input type="radio" id="dashboard" name="radio" 
 {% if request.resolver_match.url_name == 'home' %}checked {% endif %}>
  <input type="radio"  name="radio" id="inventory"
- {% if request.resolver_match.url_name == 'stock' or request.resolver_match.url_name == 'stockout'  %}checked {% endif %}>
- <input type="radio" name="radio" id="stockin">
+ {% if request.resolver_match.url_name == 'stock' or request.resolver_match.url_name == 'stockout' or request.resolver_match.url_name == 'stockinprompt' %}checked {% endif %}>
+ <input type="radio" name="radio" id="stockin"
+ {% if request.resolver_match.url_name == 'stockmovements' %}checked {% endif %}>
  <input type="radio" name="radio" id="purchases">
  <input type="radio" name="radio" id="suppliers">
  <input type="radio" name="radio" id="report">
@@ -128,7 +129,9 @@ a{
   </label>
 
   <label for="stockin">
-    <i class="fa-solid fa-clock-rotate-left"></i>Movements
+    <a href="{% url 'stockmovements' %}" onclick="moveSlider(event, 'stockin', this.href)" >
+       <i class="fa-solid fa-clock-rotate-left"></i>Movements
+    </a>
   </label>
 
   <label for="purchases">
