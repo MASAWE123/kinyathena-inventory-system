@@ -618,7 +618,7 @@
        <div class="select-statuses">
         <select name="movement_status" id="statuses" onchange="this.form.submit()">
           <option value=""
-          {% if not selected_movement_status %}selected{% endif %}>All Time</option>
+          {% if not selected_movement_status %}selected{% endif %}>Movement</option>
           <option value="in"
           {% if selected_movement_status == 'in' %}selected{% endif %}>stock In</option>
           <option value="Out"
