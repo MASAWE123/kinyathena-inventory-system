@@ -656,17 +656,17 @@
         <nav aria-label="...">
             <ul class="pagination">
               {% if page_obj.has_previous %}
-              <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}#inventory-table" class="page-link">Previous</a></li>
+              <li class="page-item"><a href="?status={{selected_status}}&page={{ page_obj.previous_page_number }}#inventory-table" class="page-link">Previous</a></li>
               {% endif %}
               {% for num in page_obj.paginator.page_range %}
                 {% if page_obj.number == num %}
-                  <li class="page-item active"><a class="page-link" href="?page={{ num }}#inventory-table">{{ num }}</a></li>
+                  <li class="page-item active"><a class="page-link" href="?status={{selected_status}}&page={{ num }}#inventory-table">{{ num }}</a></li>
                 {% else %}
-                  <li class="page-item"><a class="page-link" href="?page={{ num }}#inventory-table">{{ num }}</a></li>
+                  <li class="page-item"><a class="page-link" href="?status={{selected_status}}&page={{ num }}#inventory-table">{{ num }}</a></li>
                 {% endif %}
               {% endfor %}
               {% if page_obj.has_next %}
-              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}#inventory-table">Next</a></li>
+              <li class="page-item"><a class="page-link" href="?status={{selected_status}}&page={{ page_obj.next_page_number }}#inventory-table">Next</a></li>
               {% endif %}
             </ul>
         </nav>
