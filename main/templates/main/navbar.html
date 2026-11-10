@@ -109,7 +109,7 @@ a{
  <input type="radio"  name="radio" id="inventory"
  {% if request.resolver_match.url_name == 'stock' or request.resolver_match.url_name == 'stockout' or request.resolver_match.url_name == 'stockinprompt' %}checked {% endif %}>
  <input type="radio" name="radio" id="stockin"
- {% if request.resolver_match.url_name == 'stockmovements' %}checked {% endif %}>
+ {% if request.resolver_match.url_name == 'stockmovements' or request.resolver_match.url_name == 'stockmovements_details'%}checked {% endif %}>
  <input type="radio" name="radio" id="purchases">
  <input type="radio" name="radio" id="suppliers">
  <input type="radio" name="radio" id="report">

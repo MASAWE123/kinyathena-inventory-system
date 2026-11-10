@@ -345,7 +345,7 @@
         display: grid;
         column-gap: 10px;
         margin-top: 10px;
-        grid-template-columns: 5fr 2fr;
+        grid-template-columns: 5fr 1fr 1fr;
       }
       .search .select-suppliers{
         display: flex;
@@ -503,7 +503,45 @@
        width:100px;
       }
      
-      
+     .movement-badge {
+    display: inline-block;
+    padding: 2px 13px;
+    border-radius: 20px;
+    background: #d9f7e8;
+    border: 1px solid #b4ebcf;
+    color: #087d43;
+    font-size: 15px;
+    font-weight: 600;
+    }
+    .movement-supplier{
+    display: inline-block;
+    padding: 2px 13px;
+    border-radius: 20px;
+    background: rgb(178, 208, 241);
+    border: 1px solid #b4ebcf;
+    color: blue;
+    font-size: 15px;
+    font-weight: 600;
+    }
+    .movement_In{
+    display: inline-block;
+    padding: 2px 13px;
+    border-radius: 20px;
+    background:rgb(207, 238, 220);;
+    border: 1px solid #b4ebcf;
+    color: rgb(54, 121, 68);
+    font-size: 15px;
+    font-weight: 600;
+    }
+    .movement_Out{
+    display: inline-block;
+    padding: 4px 13px;
+    border-radius: 20px;
+    background: rgb(254, 237, 202);
+    color: rgb(199, 116, 43);
+    font-size: 15px;
+    font-weight: 600;
+    }
       </style>
 
   
@@ -567,13 +605,25 @@
       <div class="select-statuses">
         <select name="status" id="statuses" onchange="this.form.submit()">
           <option value=""
-          {% if not selected_status %}selected{% endif %}>All Statuses</option>
+          {% if not selected_status %}selected{% endif %}>All Time</option>
           <option value="Today"
           {% if selected_status == 'Today' %}selected{% endif %}>Today</option>
           <option value="This Week"
           {% if selected_status == 'This Week' %}selected{% endif %}>This Week</option>
           <option value="This Month"
           {% if selected_status == 'This Month' %}selected{% endif %}>This Month</option>
+        </select>
+      </div>
+
+       <div class="select-statuses">
+        <select name="movement_status" id="statuses" onchange="this.form.submit()">
+          <option value=""
+          {% if not selected_movement_status %}selected{% endif %}>All Time</option>
+          <option value="in"
+          {% if selected_movement_status == 'in' %}selected{% endif %}>stock In</option>
+          <option value="Out"
+          {% if selected_movement_status == 'Out' %}selected{% endif %}>stock Out</option>
+        
         </select>
       </div>
   
@@ -607,12 +657,31 @@
             <th scope="row">{{item.id}}</th>
             <td>{{item.item}}</td>
             <td>{{item.quantity}}</td>
-            <td>{{item.supplier_issued_to}}</td>
+            {% if item.supplier_issued_to == request.user.username %}
+            <td >
+              <span class="movement-badge">{{item.supplier_issued_to}}</span>
+            </td>
+            {% else %}
+            <td>
+              <span class="movement-supplier">{{item.supplier_issued_to}}</span>
+            </td>
+            {% endif %}
+
+
             <td>{{item.date|date:"M d, Y H:i"}}</td>
-            <td>{{item.movement}}</td>
-            <td>{{item.reason}}</td>
+
+            {% if item.movement == 'Out' %}
+            <td>
+               <span class="movement_Out">stock {{item.movement}}</span> 
+            </td>
+            {% else %}
+            <td>
+               <span class="movement_In">stock {{item.movement}}</span> 
+            </td>
+            {% endif %}
+            <td>{{item.reason|truncatechars:15}}</td>
             <td class="Action">
-               <a type="button" class="btn btn-outline-primary" href="#">View </a>
+               <a type="button" class="btn btn-outline-primary" href="{% url 'stockmovements_details' item.id %}">View </a>
             </td>
           
           </tr>
@@ -630,17 +699,17 @@
         <nav aria-label="...">
             <ul class="pagination">
               {% if page_obj.has_previous %}
-              <li class="page-item"><a href="?status={{selected_status}}&q={{search_stock_movements|urlencode}}&page={{ page_obj.previous_page_number }}#inventory-table" class="page-link">Previous</a></li>
+              <li class="page-item"><a href="?movement_status={{selected_movement_status}}&status={{selected_status}}&q={{search_stock_movements|urlencode}}&page={{ page_obj.previous_page_number }}#inventory-table" class="page-link">Previous</a></li>
               {% endif %}
               {% for num in page_obj.paginator.page_range %}
                 {% if page_obj.number == num %}
-                  <li class="page-item active"><a class="page-link" href="?status={{selected_status}}&q={{search_stock_movements|urlencode}}&page={{ num }}#inventory-table">{{ num }}</a></li>
+                  <li class="page-item active"><a class="page-link" href="?movement_status={{selected_movement_status}}&status={{selected_status}}&q={{search_stock_movements|urlencode}}&page={{ num }}#inventory-table">{{ num }}</a></li>
                 {% else %}
-                  <li class="page-item"><a class="page-link" href="?status={{selected_status}}&q={{search_stock_movements|urlencode}}&page={{ num }}#inventory-table">{{ num }}</a></li>
+                  <li class="page-item"><a class="page-link" href="?movement_status={{selected_movement_status}}&status={{selected_status}}&q={{search_stock_movements|urlencode}}&page={{ num }}#inventory-table">{{ num }}</a></li>
                 {% endif %}
               {% endfor %}
               {% if page_obj.has_next %}
-              <li class="page-item"><a class="page-link" href="?status={{selected_status}}&q={{search_stock_movements|urlencode}}&page={{ page_obj.next_page_number }}#inventory-table">Next</a></li>
+              <li class="page-item"><a class="page-link" href="?movement_status={{selected_movement_status}}&status={{selected_status}}&q={{search_stock_movements|urlencode}}&page={{ page_obj.next_page_number }}#inventory-table">Next</a></li>
               {% endif %}
             </ul>
         </nav>

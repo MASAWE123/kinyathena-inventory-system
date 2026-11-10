@@ -1,0 +1,397 @@
+{% extends 'main/base.html' %}
+{% block content %}
+ <style>
+
+ .movement-summary {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: #f8faff;
+    border: 1px solid #cbdcff;
+    border-radius: 10px;
+    padding: 20px 10px;
+    margin-top: 20px;
+}
+
+.summary-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 10px 15px;
+    border-right: 1px solid #d5e0f1;
+    min-width: 0;
+}
+
+.summary-item:last-child {
+    border-right: none;
+}
+
+.summary-icon {
+    color: #075bdc;
+    font-size: 25px;
+    background: #e6efff;
+    border-radius: 50%;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.summary-content span {
+    color: #075bdc;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.summary-content h3 {
+    font-size: 20px;
+    color: #071e52;
+    font-weight: 700;
+    margin: 0;
+}
+
+.summary-content small {
+    font-size: 15px;
+    color: #53647e;
+}
+
+.stock-Out{
+    display: inline-block;
+    padding: 4px 13px;
+    border-radius: 20px;
+    background: rgb(254, 237, 202);
+    color: rgb(199, 116, 43);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.stock-in {
+    display: inline-block;
+    background: #d9f7e8;
+    color: #087d43;
+    border: 1px solid #b4ebcf;
+    border-radius: 20px;
+    padding: 5px 13px;
+
+}
+
+/* Main Container */
+.details-container {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #cbdcff;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 25px;
+}
+
+/* Header */
+.details-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: #e2ecff;
+    border-bottom: 1px solid #cbdcff;
+}
+
+.details-header i {
+    font-size: 24px;
+    color: #0866e9;
+}
+
+.details-header h3 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 700;
+    color: #07358a;
+}
+
+/* Details Table */
+.details-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.details-table th,
+.details-table td {
+    padding: 11px 18px;
+    text-align: left;
+    border-bottom: 1px solid #d6e0ef;
+    font-size: 17px;
+    color: #15213d;
+}
+
+/* First Column */
+.details-table th {
+    width: 20%;
+    background: #eaf1ff;
+    font-weight: 700;
+}
+
+/* Second Column */
+.details-table td {
+    background: #fff;
+    font-weight: 400;
+}
+
+/* Remove Last Row Border */
+.details-table tr:last-child th,
+.details-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Movement Badge */
+.movement-badge {
+    display: inline-block;
+    padding: 4px 13px;
+    border-radius: 20px;
+    background: #d9f7e8;
+    border: 1px solid #b4ebcf;
+    color: #087d43;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* Note and Reason */
+.detail-description {
+    width: 100%;
+    min-height: 10px;
+    padding: 0px 12px;
+    box-sizing: border-box;
+    background: #f0f1f5;
+    border: 1px solid #bdc8d9;
+    border-radius: 7px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .details-table th {
+        width: 35%;
+    }
+
+    .details-table th,
+    .details-table td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .details-header h3 {
+        font-size: 18px;
+    }
+    
+}
+.page-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 9px 14px;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    color: #334155;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.back-button:hover {
+    background: #f1f5f9;
+    color: #075bdc;
+}
+
+.page-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.title-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e6efff;
+    border-radius: 10px;
+    color: #0866e9;
+    font-size: 23px;
+    flex-shrink: 0;
+}
+
+.page-title h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #071e52;
+    margin: 0 0 6px;
+}
+
+.page-title p {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0;
+}
+body{
+    background-color:rgba(255,255,255,0.1);
+}
+  </style>
+<main style="margin: 20px;">
+
+        <div class="page-header">
+
+        <a href="{% url 'stockmovements' %}" class="back-button">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Stock Movements
+        </a>
+
+        <div class="page-title">
+            <div class="title-icon">
+                <i class="fa-solid fa-right-left"></i>
+            </div>
+
+            <div>
+                <h2>Stock Movement Details</h2>
+                <p>View complete information about this stock movement.</p>
+            </div>
+        </div>
+
+    </div>
+         <div class="movement-summary">
+
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span>Item</span>
+                        <h3>{{stock.item}}</h3>
+                    </div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-hashtag"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span>Quantity</span>
+                        <h3>{{stock.quantity}}</h3>
+                    </div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-right-left"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span>Movement</span>
+                        {% if stock.movement == "in" %}
+                        <h3><small class="stock-in">Stock {{stock.movement}}</small></h3>
+                        {% else %}
+                        <h3><small class="stock-Out">Stock {{stock.movement}}</small></h3>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="fa-regular fa-calendar-days"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span>Date</span>
+                        <h3>{{stock.date|date:"M d, Y"}}</h3>
+                        <small>{{stock.date|date:"H:i"}}</small>
+                    </div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-tag"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span>Reason</span>
+                        <h3>{{stock.reason}}</h3>
+                    </div>
+                </div>
+
+        </div>
+        
+        <div class="details-container">
+
+   
+        <div class="details-header">
+            <i class="fa-solid fa-circle-info"></i>
+            <h3>Additional Details</h3>
+        </div>
+
+       
+        <table class="details-table">
+            <tbody>
+
+                <tr>
+                    <th>Item Name</th>
+                    <td>{{stock.item}}</td>
+                </tr>
+
+                <tr>
+                    <th>Quantity</th>
+                    <td>{{stock.quantity}}</td>
+                </tr>
+
+                <tr>
+                    <th>Movement Type</th>
+                    <td>
+                        <span class="movement-badge">Stock {{stock.movement}}</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Date</th>
+                    <td>{{stock.date|date:"M d,Y,H:i"}}</td>
+                </tr>
+
+                <tr>
+                    <th>Supplier/Recorded By</th>
+                    <td>{{stock.supplier_issued_to}}</td>
+                </tr>
+             {% if stock.note %}
+                <tr>
+                 
+                    <th>Note</th>
+                    <td>
+                        <div class="detail-description">
+                          {{stock.note}}
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+
+                <tr>
+                    <th>Reason</th>
+                    <td>
+                        <div class="detail-description">
+                            {{stock.reason}}
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>     
+  </main>
+{% endblock content %}

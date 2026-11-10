@@ -225,7 +225,8 @@ def stockOut(request,stockid):
           quantity = int(quantity),
           supplier_issued_to = request.user.username,
           movement = 'Out',
-          reason=str(reason)
+          reason=str(reason),
+          note =notes,
     )
       return redirect('stock')
   context = {
@@ -276,7 +277,8 @@ def stockInPrompt(request,stockid):
           quantity = int(quantity),
           supplier_issued_to = request.user.username,
           movement = 'In',
-          reason=str(reason)
+          reason=str(reason),
+          note = notes,
     )
       return redirect('stock')
   context = {
@@ -300,6 +302,7 @@ def stockMovements(request):
       Q(movement__icontains=search_stock_movements)
     )
   selected_status = request.GET.get('status','').strip()
+  selected_movement_status = request.GET.get('movement_status','').strip()
 
   if selected_status == 'Today':
    stock_movements = stock_movements.filter(date__date=today)
@@ -308,7 +311,9 @@ def stockMovements(request):
   elif selected_status == 'This Month':
    stock_movements = stock_movements.filter(date__date__month=today.month, date__date__year=today.year)
   
- 
+  if selected_movement_status in dict(StockMovements.Movement_type):
+   stock_movements = stock_movements.filter(movement=selected_movement_status)
+
 
 
   paginator = Paginator(stock_movements, 7) 
@@ -323,6 +328,14 @@ def stockMovements(request):
     'this_month_movements': this_month_movements,
     'stock_movements_counts':stock_movements_counts,
     'selected_status':selected_status,
-    'search_stock_movements':search_stock_movements
+    'search_stock_movements':search_stock_movements,
+    'selected_movement_status':selected_movement_status,
   }
   return render(request, 'main/stock_movements.html', context)
+
+def stockMovements_details(request, movementid):
+    stock=StockMovements.objects.get(id=movementid)
+    context ={
+      'stock':stock,
+    }
+    return render(request, 'main/stock_movement_details.html',context)

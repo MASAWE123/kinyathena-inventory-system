@@ -81,6 +81,7 @@ class StockMovements(models.Model):
   date=models.DateTimeField(auto_now_add=True)
   movement = models.CharField(max_length=200,choices=Movement_type)
   reason = models.CharField(max_length=300,null=True,blank=True)
+  note = models.CharField(max_length=1000,null=True,blank=True)
 
   def __str__(self):
     return f'{self.item}-{self.movement }'

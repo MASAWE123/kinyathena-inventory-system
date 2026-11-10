@@ -212,13 +212,13 @@
     {% csrf_token %}
       <div class="quantity">
         <label for="quantity">Quantity to Stock Out <span>*</span></label>
-        <input type="number" id="quantity" name="quantity" value="0" min="1" max="{{ stock.quantity }}">
+        <input type="number" id="quantity" name="quantity" value="0" min="1" max="{{ stock.quantity }}" required>
         <div class="more_info">Enter the quantity to be taken out of stock.(Available: {{ stock.quantity }})</div>
       </div>
 
       <div class="reason">
         <label for="reason">Reason for Stock Out <span>*</span></label>
-        <input type="text" id="reason" name="reason" placeholder="Enter reason for stock out">
+        <input type="text" id="reason" name="reason" placeholder="Enter reason for stock out" required>
       </div>
 
       <div class="note">
