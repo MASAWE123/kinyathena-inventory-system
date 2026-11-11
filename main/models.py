@@ -18,7 +18,7 @@ class supplierItems(models.Model):
      return self.itemName
 
 class Purchase(models.Model):
-  supplier = models.ForeignKey(Suppliers,on_delete=models.PROTECT)
+  supplier = models.ForeignKey(Suppliers,on_delete=models.PROTECT,related_name='purchases')
   date_ordered = models.DateTimeField(auto_now_add=True)
   choices=[
     ("pending","Pending"),

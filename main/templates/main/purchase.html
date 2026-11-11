@@ -1,153 +1,768 @@
 {% extends 'main/base.html' %}
 {% block content %}
-
-  
-  <style>
-    .popup{
-      position: absolute;
-      background-color: white;
-      height: 600px;
-      width: 30%;
-      left: 50%;
-      top: 50%;
-      transform:translate(-50%,-50%);
-      border-radius: 8px;
+<style>
+    #inventory:checked ~ .slider{
+      top: calc(400px * 1/6);
+    }
+    #stockin:checked ~ .slider{
+      top: calc(400px * 2/6);
+    }
+    #purchases:checked ~ .slider{
+      top: calc(400px * 3/6);
+    }
+    #suppliers:checked ~ .slider{
+      top: calc(400px * 4/6);
+    }
+    #report:checked ~ .slider{
+      top: calc(400px * 5/6);
+    }
     
+    nav input{
+      display: none;
+    }
+
+      body{
+        background-color: rgba(0,0,0,0.01)
+      }
+      .popup{
+        position: relative;
+        background-color: white;
+        width: min(500px, 100%);
+        max-height: calc(100vh - 32px);
+        overflow-y: auto;
+        box-sizing: border-box;
+        border-radius: 8px;
+        z-index:2000;
+        margin-top:50px
+       
+      }
+      .popup .title{
+        margin: 12px 16px;
+        padding-bottom: 10px;
+      }
+      .popup .title span{
+        font-size: 22px;
+      }
+      .popup form{
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px 16px;
+        padding: 0 16px 12px;
+      
+      }
+      .popup .input_container{
+        min-width: 0;
+      }
+      .popup .input_container label{
+        margin-left: 0;
+      }
+      .popup .input_container input{
+        box-sizing: border-box;
+        margin: 4px 0;
+      }
+      .popup .input_container textarea{
+        box-sizing: border-box;
+        min-height: 48px;
+        margin: 4px 0;
+        padding: 8px;
+        font-size: 14px;
+      }
+      .popup .input_container textarea::placeholder{
+        font-size: 14px;
+      }
+      .popup .cancel_save_button{
+        grid-column: 1 / -1;
+        margin-top: 4px;
+      }
+      .popup .cancel_save_button .submit_button,
+      .popup .submit_cancel_button{
+        margin: 10px 8px;
+      }
+      .popup .cancel_save_button .submit_button{
+        outline: none;
+        border: none;
+      }
+      @media (max-width: 520px){
+        .popup .cancel_save_button{
+          grid-column: 1;
+        }
+      }
+      .overlay {
+          position: fixed;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+          box-sizing: border-box;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          opacity: 0;
+          visibility: hidden;
+          transition: all ease 0.3s;
+          pointer-events: none;
+      }
      
-    }
-    .overlay {
-        position: fixed;
-        inset: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        opacity: 0;
-        transition: all ease 0.3s;
-        pointer-events: none;
-    }
-    .addPurchase:has(#check:checked) ~ .overlay{
-      opacity: 1;
-      pointer-events: auto;
-    }
-    
-    
-    </style>
-    
-    <div class="addPurchase">
-      <span style="font-weight: 700;">Purchases</span>
-      <input type="checkbox" id="check">
-      <label for="check">Add Purchase</label>
-    
-    </div>
-    
-    <div class="purchase" style="margin-right: 20px;">
-      <table class="table table-striped"  >
-      <thead>
-        <tr>
-          <th scope="col"></th>
-          <th scope="col">Supplier</th>
-          <th scope="col">Items</th>
-          <th scope="col">Date Ordered</th>
-          <th scope="col">Status</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for purchase in purchases %}
-        <tr>
-          <th scope="row">{{purchase.id}}</th>
-          <td>{{purchase.supplier}}</td>
-          <td>{{purchase.items.count}}</td>
-          <td>{{purchase.date_ordered}}</td>
-          <td>{{purchase.status}}</td>
-          <td>
-            <a href="{% url 'receive' purchase.id %}">
-              <button>Receive</button>
-            </a>
-            
-          </td>
-        </tr>
-        {% endfor %}
+      .title{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin:25px 10px;
+        border-bottom: 1px solid rgba(180, 180, 180, 0.3); 
+        padding-bottom: 20px;
+      }
+      .title span{
+        font-family: sans-serif;
+        font-weight: 700;
+        font-size: 25px;
+      }
+      .title span i{
+        font-size: 35px;
+        margin-right: 20px;
+        transform: translateY(7px);
+      }
+      .popup .title div label{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+      }
+     
+      .popup .title div label i{
+        font-size: 14px;
+        color: #888;
+        cursor: pointer;
       
-      </tbody>
-    </table>
-    <div class="total" style="font-weight: 700;">
-      <span >Total Purchases:</span>
-      <span>{{purchase_count}}</span>
-    </div>
-    </div>
-    
-    <div class="overlay">
-      <div class="popup">
-        <div>
-          <span>Add Purchase</span>
-          <div>
-            <label for="check">
-              <i class="fa-solid fa-x"></i>
-            </label>
-            
-
+      }
+      .title div label:hover{
+        background-color:rgba(243, 244, 246,0.5);
+        border-radius: 25px;
+      }
+      .title div label:active{
+       background-color: rgba(243,244,246,0.2);
+      }
+      
+      .input_container{
+        display: flex;
+        flex-direction: column;
+       
         
-  
-            <form action="{% url 'purchase' %}" method="POST">
-              {% csrf_token %}
-                <div class="supplierchoice">
-                  <label for="supplier">Supplier</label>
-                  <input type="text" placeholder="Select Supplier" id="supplier" name="supplier">
-                </div>
-            
-              <div class="items">
-                <div>Items</div>
-                <div>
-                    <span>Item</span>
-                    <span>Quantity</span>
-                </div>
-              </div>
 
-              <div id="itemRows">
-                <div class="item-row">
-                  <input type="text" name="item" required>
-                  <input type="number" name="quantity" required>
-                  <button class="delete-item" type="button">delete</button>
-                </div>
-              </div>
-          
-            
-          </div>
-        </div>
-        <br><br>
-        <button id="addItem" type="button">Add Another Item</button>
-        <button type="button">cancel</button>
-        <button type="submit">save Purchase</button>
-      </form>
-        </div>
-      </div>
-    </div>
+      }
+      .input_container input{
+        padding: 10px 10px;
+        margin:10px 20px;
+        border: 1px solid rgba(180, 180, 180, 0.5);
+        border-radius: 7px;
+        box-shadow:inset 0px 1px 8px rgba(0, 0, 0, 0.1);
+        outline: none;
+        outline: none;
+        transition: all  0.03s ease;
+      }
+      .input_container input::placeholder{
+        font-size: 14px;
+        font-weight: 550;
+      }
+      
+      .input_container label{
+        font-family: sans-serif;
+        font-weight: 700;
+        margin-left: 20px;
+      }
+      
+      .input_container textarea{
+        margin: 5px 20px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        padding: 10px 0 30px 10px;
+        outline: none;
+        box-shadow: inset 0 2px 8px rgba(0,0,0, 0.2);
+        font-size: 20px;
+      }
+      .input_container textarea::placeholder{
+        font-size: 16px;
+      }
+      .input_container span{
+        color: red;
+      }
+      .items .titleName .quantity{
+        margin-right: 220px;
+      }
+      .items .titleName .item{
+        margin-left: 5px;
+      }
+      .item-row{
+        display: grid;
+        grid-template-columns: 1fr 1fr 50px;
+        column-gap: 15px;
+        margin-left: 20px;
 
-    <script>
-      const addItem = document.getElementById('addItem');
-      const itemRows = document.getElementById('itemRows');
+      }
+    
+      .item-row .itemName,
+      .item-row .itemquantity{
+        padding: 10px 10px;
+        margin:10px 0px;
+        border: 1px solid rgba(180, 180, 180, 0.5);
+        border-radius: 7px;
+        outline: none;
+      }
+      .item-row .itemquantity{
+        width: 200px;
+      }
+      .item-row i{
+        display: flex;
+        align-items: center;
+        color: red;
+        font-size: 20px;
+      }
+      .add_button{
+        margin: 20px;
+      }
+      .add_item_button{
+        border: 2px solid rgb(103, 159, 255);
+        color: rgba(74, 134, 235);
+        padding: 10px 15px;
+        border-radius: 7px;
+        cursor: pointer;
+      }
+      .add_item_button:active {
+        background-color: rgb(103, 159, 255);
+        color: white;
+      }
+      .cancel_save_button{
+        margin-top: 50px;
+        border-top: 1px solid rgba(180, 180, 180, 0.7);
+        display: flex;
+        justify-content: right;
+        align-items: center;
+      }
       
-      
-      addItem.addEventListener('click',function(){
-        const newRow = document.createElement('div')
-        newRow.classList.add('item-row');
-        newRow.innerHTML = `
-           <input type="text" name = 'item' required>
-                <input type="number" name = 'quantity' required>
-                <button class="delete-item" type="button">delete</button>`;
-        itemRows.appendChild(newRow);
+      .cancel_save_button .submit_button{
+        padding: 10px 20px;
+        background-color:rgba(30, 102, 221) ;
+        color: white;
+        border-radius: 5px;
+        margin:15px 20px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .cancel_save_button .submit_button i{
+        margin-right: 5px;
+        font-size: 20px;
+      }
+      .submit_cancel_button{
+        padding: 10px 20px;
+        background-color:rgba(180,180,180,0.3) ;
+        color: black;
+        border-radius: 5px;
+        font-weight: 700;
+        margin:15px 20px;
+        border: 1px solid rgba(180,180,180,1);
+        cursor: pointer;
+      }
+      .inventoryTitle{
+        display: flex;
+        justify-content: space-between;
+        padding: 0 50px 0 5px;
+        align-items: center;
+        margin-top: -25px;
+      }
+      .inventoryTitle_first{
+        display: flex;
+      }
+      .inventoryTitle_first i{
+        font-size: 35px;
+        /* transform: translateY(10px); */
+        margin-top:10px
+      }
+      .inventoryTitle_first div{
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
         
-      });
-
-      itemRows.addEventListener('click', function(event) {
-
-      if (event.target.classList.contains('delete-item')) {
-
-          event.target.parentElement.remove();
+      }
+      .inventoryTitle_first div span:first-child{
+        font-family: sans-serif;
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 8px;
+     
+      }
+      
+      .status {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap:5px;
+        margin-right: 20px;
+        margin-top: 10px;
+      }
+      .status .updates{
+        display: flex;
+        position:relative;
+        background-color: blue;
+        padding: 50px 0;
+        min-height: 20px;
+        border-radius: 8px;
+      }
+      .status .updates div:last-child{
+        display: flex;
+        flex-direction: column;
+        position:absolute;
+        left: 100px;
+        top: 25px;
+      }
+      .status .updates div i{
+        color: blue;
+        font-size: 30px;
+        position:absolute;
+        top: 27px;
+        left: 30px;
+        background-color:rgba(178, 208, 241);
+        border-radius: 5px;
+        padding: 7px 5px;
+      }
+      .status .updates div .number{
+        font-size: 20px;
+        font-weight: bold;
+      }
+      
+      .status .updates:first-child{
+        background-color:rgb(239, 246, 253);
+        border: 2px solid rgba(220, 233, 251);
 
       }
 
-      });
-    </script>
+      .search{
+        background-color: white;
+        border-radius: 7px;
+        margin-right: 20px;
+        box-shadow:0px 1px 8px rgba(0, 0, 0, 0.3);
+        padding: 10px 30px;
+        display: grid;
+        column-gap: 10px;
+        margin-top: 10px;
+        grid-template-columns: 5fr 2fr;
+      }
+      .search .select-suppliers{
+        display: flex;
+        border: 2px solid #ccc;
+        align-items: center;
+        border-radius: 7px;
+      }
+      .search #suppliers{
+       outline: none;
+       width: 100%;
+       border:none;
+       background-color: white;
+      }
+      .search .select-statuses{
+        display: flex;
+        align-items: center;
+        border: 2px solid #ccc;
+        border-radius: 7px;
+      }
+      .search .select-statuses #statuses{
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
+        background-color: inherit;
+      }
+      .search-button{
+        display: flex;
+        border: 2px solid #ccc;
+        gap: 10px;
+        align-items: center;
+        padding: 5px;
+        border-radius:7px ;
+      }
+      .search-button input{
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        color: #4e4b4b;
+      }
+      .search-button input::placeholder{
+        font-size: 14px;
+        transform: translateY(-2px);
+      }
+      .search-button i {
+        color: #888;
+      }
+      .recent-inventory-table{
+        border:2px solid rgba(222, 226, 230);
+        margin-right: 20px;
+        padding:10px 20px;
+        margin-top: 15px;
+        background-color: white;
+        margin-bottom: 20px;
 
-{% endblock %}
+      }
+      .recent-inventory-table .recent-title{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+       margin-top: -5px;
+        
+      }
+      .recent-inventory-table .recent-title div:first-child{
+        font-weight: 700;
+        font-size: 20px;
+      }
+      .recent-inventory-table .current-stock-link{
+        display: inline;
+        color: inherit;
+        text-decoration: none;
+      }
+      .recent-inventory-table .recent-title div:last-child{
+        transform: translateY(6px);
+      }
+      .inventoryTitle_second{
+        transform: translateY(-10px);
+      }
+      .inventoryTitle_second label span{
+         background-color: rgba(14, 113, 229);
+         padding: 10px 20px;
+         color: white;
+         border-radius: 7px;
+         font-weight: 600;
+         cursor: pointer;
+      }
+      .inventoryTitle_second label span i{
+        margin-right: 2px;
+      }
+      .inventoryTitle_second input{
+        display: none;
+      }
+     .inventoryTitle:has(#check:checked) ~ .overlay{
+        opacity: 1;
+        visibility: visible;
+        pointer-events:auto;
+      }
+      .recent-inventory-table .table{
+        margin-top: 17px;
+        border: 2px solid rgba(222, 226, 230);
+        border-radius: 7px;
+        padding: 10;
+        text-align: center;
+      }
+      .recent-inventory-table .table tbody tr {
+        /* height: 40px;  */
+      }
+      .recent-inventory-table .table tbody tr td{
+        /* text-align: left; */
+      }
+      .recent-inventory-table .table thead tr th{
+        background-color:rgba(237, 243, 249);
+      }
+      .recent-inventory-table .last-part{
+        display: flex;
+        justify-content: space-between;
+        margin-top: -13px;
+        align-items: center;
+      }
+      .recent-inventory-table .last-part .action{
+       transform: translateY(15px);
+      }
+      .low_stock_item,
+      .out_of_stock,
+      .in_stock{
+        display: inline-block;
+        transform: translateY(0px);
+      }
+      .low_stock_item{
+        background-color:rgb(254, 237, 202);
+        color: rgb(199, 116, 43);
+        padding: 7px 20px;
+        border-radius: 20px;
+      }
+      .out_of_stock{
+        background-color: rgb(253, 221, 222);
+        color: rgb(220, 80, 77);
+        padding: 7px 20px;
+        border-radius: 20px;
+      }
+      .in_stock{
+        background-color:rgb(207, 238, 220);
+        padding: 5px 20px;
+        border-radius: 20px;
+        color: rgb(54, 121, 68);
+      }
+      .action_header{
+        display: flex;
+        justify-content: center;
+      }
+      .Action{
+          display: flex;
+          justify-content: center;
+          column-gap: 10px;
+      }
+      .Action  a{
+       width:100px;
+      }
+     .status_pending{
+          display: inline-block;
+          padding: 2px 13px;
+          border-radius: 20px;
+          background:rgb(253, 221, 222);
+          color: rgb(220, 80, 77);
+          font-size: 15px;
+          font-weight: 600;
+     }
+     .status_partial{
+          display: inline-block;
+          padding: 2px 13px;
+          border-radius: 20px;
+          background:rgb(254, 237, 202);
+          color: rgb(199, 116, 43);
+          font-size: 15px;
+          font-weight: 600;
+     }
+     .status_receive{
+          display: inline-block;
+          padding: 2px 13px;
+          border-radius: 20px;
+          background:rgb(207, 238, 220);;
+          border: 1px solid #b4ebcf;
+          color: rgb(54, 121, 68);
+          font-size: 15px;
+          font-weight: 600;
+     }
+      
+      </style>
+
+  
+    <div class="inventoryTitle">
+      <div class="inventoryTitle_first">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <div>
+          <span>Purchases</span>
+          <span>View and manage all purchase orders from your suppliers</span>
+        </div>
+      </div>
+
+       <div class="inventoryTitle_second">
+          <input type="checkbox" id="check">
+          <label for="check">
+            <span><i class="fa-solid fa-plus"></i> Add Item</span>
+          </label>
+        </div>
+    
+    </div>
+
+    <div class="status">
+      <div class="updates">
+        <div><i class="fa-solid fa-file-lines"></i></div>
+        <div>
+          <span>Total Purchases</span>
+          <span class="number">{{purchase_count}}</span>
+        </div>
+      </div>
+
+      <div class="updates" style="background-color:rgb(253, 247, 234);border: 2px solid rgb(252, 244, 225);">
+        <div><i class="fa-regular fa-clock" style="color:rgb(203, 135, 16);background-color:rgb(254, 247, 224)"></i></div>
+        <div>
+          <span>Pending</span>
+          <span class="number">{{purchase_pending_count}}</span>
+        </div>
+      </div>
+
+      <div class="updates" style="background-color:rgb(253, 244, 236);border: 2px solid rgb(251, 239, 228);">
+        <div><i class="fa-solid fa-hourglass-half" style="color:rgb(220, 98, 9);background-color:rgb(253, 234, 215)"></i></div>
+        <div>
+          <span>Partially Received</span>
+          <span class="number">{{purchase_partial_count}}</span>
+        </div>
+      </div>
+
+
+      <div class="updates" style="background-color:rgb(238, 248, 244);border: 2px solid rgb(226, 243, 236);">
+        <div><i class="fa-solid fa-circle-check" style="color:rgb(7, 135, 66);background-color:rgb(214, 241, 226)"></i></div>
+        <div>
+          <span>Received</span>
+          <span class="number">{{purchase_received_count}}</span>
+        </div>
+      </div>
+
+    </div>
+     
+    <form action="{% url 'purchase' %}" method="GET">
+      {% csrf_token %}
+      <div class="search">
+
+       <div class="search-button">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search Items by name,supplier" name="q" id="search" value="{{ search_query }}">
+       </div>
+
+      <div class="select-statuses">
+        <select name="status" id="statuses" onchange="this.form.submit()">
+          <option value=""
+          {% if not selected_status %}selected{% endif %}>Purchase Status</option>
+          <option value="received"
+          {% if selected_status == 'received' %}selected{% endif %}>Recieved</option>
+          <option value="pending"
+          {% if selected_status == 'pending' %}selected{% endif %}>Pending</option>
+          <option value="partial"
+          {% if selected_status == 'partial' %}selected{% endif %}>Partial</option>
+        </select>
+      </div>
+  
+    </div>
+    </form>
+
+    <div class="recent-inventory-table" id="recent-inventory-table">
+      <div class="recent-title">
+        <div><a class="current-stock-link" href="{% url 'purchase' %}?q=#recent-inventory-table">Current Purchases</a></div>
+        
+      
+      </div>
+      <table class="table" id="inventory-table">
+        <thead>
+          <tr>
+            <th  scope="col">#</th>
+            <th scope="col">Supplier</th>
+           
+            <th scope="col">Items</th>
+            <th scope="col">Date Ordered</th>
+            <th scope="col">Status</th>
+            <th scope="col">Total Items</th>
+            <th scope="col" class="action_header">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in page_obj.object_list %}
+          
+          <tr>
+            <th scope="row">{{item.id}}</th>
+            <td>{{item.supplier}}</td>
+            <td>
+            {% for purchase_item in item.items.all %}
+                <span>{{purchase_item.item|truncatechars:10}}{% if not forloop.last %},{% endif %}</span>
+            {% endfor %}
+            </td>
+          
+            <td>{{item.date_ordered}}</td>
+
+            {% if item.status == 'pending' %}
+            <td>
+              <span class="status_pending">{{item.status}}</span>
+            </td>
+            {% elif item.status == 'partial' %}
+            <td>
+              <span class="status_partial">{{item.status}}</span>
+            </td>
+            {% else %}
+            <td>
+              <span class="status_receive">{{item.status}}</span>
+            </td>
+            {% endif %}
+            
+            <td>{{item.items.all.count}}</td>
+            <td>
+                <a type="button" class="btn btn-outline-primary" href="#">
+                 View
+               </a>
+            </td>
+            
+            
+           
+          
+          
+          </tr>
+         {% endfor %}
+
+        </tbody>
+      </table>
+
+      <div class="last-part">
+        <div class="last-part-start">
+          Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} pages
+        </div>
+
+        <div class="action">
+        <nav aria-label="...">
+            <ul class="pagination">
+              {% if page_obj.has_previous %}
+              <li class="page-item"><a href="?status={{selected_status}}&page={{ page_obj.previous_page_number }}#inventory-table" class="page-link">Previous</a></li>
+              {% endif %}
+              {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                  <li class="page-item active"><a class="page-link" href="?status={{selected_status}}&page={{ num }}#inventory-table">{{ num }}</a></li>
+                {% else %}
+                  <li class="page-item"><a class="page-link" href="?status={{selected_status}}&page={{ num }}#inventory-table">{{ num }}</a></li>
+                {% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}
+              <li class="page-item"><a class="page-link" href="?status={{selected_status}}&page={{ page_obj.next_page_number }}#inventory-table">Next</a></li>
+              {% endif %}
+            </ul>
+        </nav>
+        </div>
+    
+      </div>
+    </div>
+
+      
+      <div class="overlay">
+        <div class="popup">
+          <div>
+              <div class="title">
+
+                <span><i class="fa-solid fa-cube"></i> Add New Item</span>
+                <div>
+                  <label for="check">
+                    <i class="fa-solid fa-x"></i>
+                  </label>
+                  
+              </div>
+              </div>
+          
+   
+         <form action="{% url 'stock' %}" method="POST">
+           {% csrf_token %}
+               
+                  <div class="input_container">
+                    <label for="supplier">Item Name  <span>*</span></label>
+                    <input type="text" placeholder="Enter item name(e.g Pipes,Meters)" id="item_name" name="item_name" required>
+                  </div>
+
+                  <div class="input_container">
+                    <label for="supplier">Supplier/Entered By <span>*</span></label>
+                    <input type="text" placeholder="Enter Supplier Name/Enter the name of the person" id="supplier" name="supplier" required>
+                  </div>
+                  <div class="input_container">
+                    <label for="supplier">Quantity <span>*</span></label>
+                    <input type="text" placeholder="Enter Quantity" id="quantity" name="quantity" value="0" required>
+                  </div>
+                  
+                  <div class="input_container">
+                    <label for="supplier">Description (Optional)</label>
+                    <textarea name="" id="" placeholder="Enter Item description (optional)"></textarea>
+                  </div>
+      
+                <div class="cancel_save_button">
+                  <label for="check">
+                    <span  class="submit_cancel_button">Cancel</span>
+                  </label>
+                  <button  class="submit_button" type="submit">
+                    <i class="fa-regular fa-floppy-disk"></i>
+                    Save Item
+                  </button>
+                </div>
+            </div>
+          </form>
+
+
+
+          </div>
+        </div>
+      </div>
+  
+  
+
+{% endblock content %}

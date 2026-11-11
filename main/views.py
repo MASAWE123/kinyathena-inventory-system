@@ -56,10 +56,35 @@ def purchasePage(request):
           quantity_ordered=int(quantity),
           remaining=int(quantity)
         )
-  purchases = Purchase.objects.all().order_by('-id')[:10]
+  purchases = Purchase.objects.all().order_by('-id')
   purchase_count = Purchase.objects.count()
-  purchase_items = PurchaseItem.objects.all()
-  context = {'purchases':purchases,'purchase_count':purchase_count,'items':purchase_items}
+  purchase_pending_count = Purchase.objects.filter(status='pending').count()
+  purchase_partial_count = Purchase.objects.filter(status='partial').count()
+  purchase_received_count = Purchase.objects.filter(status='received').count()
+
+  search_query = request.GET.get('q','').strip()
+  if search_query:
+    purchases = Purchase.objects.filter(
+      Q(supplier__supplier__icontains=search_query)|Q(items__item__icontains=search_query)
+    )
+
+  selected_status = request.GET.get('status','').strip()
+  if selected_status in dict(Purchase.choices):
+    purchases = Purchase.objects.filter(status=selected_status)
+ 
+
+  paginator = Paginator(purchases,7)  
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  context = {
+    'purchases':purchases,
+    'purchase_count':purchase_count,
+    'page_obj':page_obj,
+    'purchase_pending_count':purchase_pending_count,
+    'purchase_partial_count':purchase_partial_count,
+    'purchase_received_count':purchase_received_count,
+    'selected_status':selected_status,
+    }
   return render(request,'main/purchase.html',context)
 
 def receive(request,purchase_id):

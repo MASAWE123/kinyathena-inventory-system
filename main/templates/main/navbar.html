@@ -110,7 +110,8 @@ a{
  {% if request.resolver_match.url_name == 'stock' or request.resolver_match.url_name == 'stockout' or request.resolver_match.url_name == 'stockinprompt' %}checked {% endif %}>
  <input type="radio" name="radio" id="stockin"
  {% if request.resolver_match.url_name == 'stockmovements' or request.resolver_match.url_name == 'stockmovements_details'%}checked {% endif %}>
- <input type="radio" name="radio" id="purchases">
+ <input type="radio" name="radio" id="purchases"
+ {% if request.resolver_match.url_name == 'purchase' %} checked {% endif %}>
  <input type="radio" name="radio" id="suppliers">
  <input type="radio" name="radio" id="report">
  <div class="slider"></div>
@@ -135,7 +136,9 @@ a{
   </label>
 
   <label for="purchases">
-    <i class="fa-solid fa-cart-shopping"></i>Purchases
+    <a href="{% url 'purchase' %}" onclick="moveSlider(event, 'purchases', this.href)" >
+       <i class="fa-solid fa-cart-shopping"></i>Purchases
+    </a>
   </label>
 
   <label for="suppliers">
