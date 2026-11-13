@@ -142,7 +142,7 @@ def receive(request,purchase_id):
     'purchase':purchase,
     'purchaseItem':purchaseItem,
   }
-  return render(request,'main/receive.html',context)
+  return render(request,'main/purchase_receive.html',context)
 
 def stock(request):
   if request.method == 'POST':

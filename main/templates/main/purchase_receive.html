@@ -1,0 +1,265 @@
+{% extends 'main/base.html' %}
+{% block content %}
+   <style>
+    html{
+        scrollbar-width: none;
+    }
+    html ::-webkit-scrollbar-{
+        display:none
+    }
+    main{
+        margin: 10px 10px 10px -5px;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 6px;
+    }
+    .receivePage_title{
+        font-weight: 700;
+        font-size: 20px;
+    }
+    .receivePage_title a{
+        display: inline;
+        margin-right: 10px;
+        padding:11px 20px 11px 5px;
+        border-radius: 50%;
+        transition:all ease 0.3s;
+    }
+    .receivePage_title a:hover{
+        background-color:rgba(144,145,146,0.1);
+    }
+    .receivePage_title a:active{
+        opacity: 0.6;
+    }
+    .receivePage_title i{
+        padding: 10px 11px;
+    }
+   
+    .receivePage_title a{
+        text-decoration: none;
+        color: black;
+    }
+    .receivePage_status{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 20px;
+      background-color:rgb(243, 248, 254) ;
+      border: 2px solid rgb(239, 243, 246);
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+    .receivePage_status .firstpart,
+    .receivePage_status .secondpart{
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+    }
+    .receivePage_status .firstpart div,
+    .receivePage_status .secondpart div{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 250px;
+    }
+    .receivePage_status .firstpart div span:first-child,
+    .receivePage_status .secondpart div span:first-child{
+        font-weight: bold;
+    }
+    .receivePage_status .firstpart div span:last-child,
+    .receivePage_status .secondpart div span:last-child{
+        font-weight: 530;
+    }
+    .purchase-table{
+        margin-top: 20px;
+    }
+    .purchase-table .table{
+        text-align: center;
+    }
+    .purchase-table .table  .table_header th{
+        background-color: rgb(241, 244, 249);
+    }
+    .purchase-table .table tbody tr .firstrow{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        /* padding-left: 10px; */
+        padding: 10px;
+    }
+    .purchase-table .table tbody tr .firstrow span{
+        margin-left: 20px;
+    }
+    .purchase-table .table tbody tr .firstrow span:last-child{
+        font-size: 12px;
+        color: #888;
+    }
+   .table tbody .table-row{
+    padding: 15px;
+   }
+   .table tbody input{
+    border:2px solid rgb(220, 223, 230);
+    padding: 5px;
+    border-radius: 7px;
+    outline: none;
+   }
+   .note{
+    display: flex;
+    align-items: flex-start;
+    background-color: rgb(237, 245, 255);
+    color: rgb(77, 111, 166);
+    padding: 20px;
+    border-radius: 6px;
+   }
+   .note div:last-child{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    font-size: 14px;
+   }
+   .note i{
+    font-size: 25px;
+    color: blue;
+   }
+   .cancel_receive_button{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+   }
+   .cancel_receive_button a{
+    text-decoration: none;
+    color: black;
+    display: inline-block;
+    width: 100px;
+    border: 1px solid #ccc;
+    padding: 7px 25px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+    font-weight: bolder;
+   }
+   .cancel_receive_button button{
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(41, 144, 88);
+    padding: 7px 25px;
+    transition: all ease 0.3s;
+   }
+   .cancel_receive_button button:hover{
+      opacity: 0.8;
+   }
+     .cancel_receive_button button:active{
+      opacity: 0.6;
+   }
+   .cancel_receive_button button i{
+     margin-right: 7px;
+   }
+ </style>
+</head>
+<body style="background-color: #f5f5f5;">
+
+ <main>
+    <div class="receivePage_title">
+        <a href="{% url 'purchase' %}"><i class="fa-solid fa-arrow-left"></i></a> Receive Purchase 
+    </div>
+    <div class="receivePage_status">
+      <div class="firstpart">
+
+       <div class="purchase_id">
+        <span>Purchase:</span> <span>7</span>
+       </div>
+
+        <div class="supplier">
+        <span>Supplier:</span> <span>ABC Pipes Ltd</span>
+       </div>
+        <div class="date_ordered">
+        <span>Date Ordered:</span> <span>2025-09-15</span>
+       </div>
+
+      </div>
+
+      <div class="secondpart">
+        <div class="status">
+        <span>Status:</span> <span>Pending</span>
+       </div>
+
+        <div class="total_items">
+        <span>Total Items:</span> <span>3</span>
+       </div>
+       
+      </div>
+
+
+    </div>
+    <div class="purchase-table">
+        <table class="table table-bordered">
+        <thead>
+            <tr class="table_header">
+            <th scope="col">Item</th>
+            <th scope="col">Ordered Quantity</th>
+            <th scope="col">Already Received</th>
+            <th scope="col">Receive Now</th>
+            <th scope="col">Remaining</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td scope="row" class="firstrow">
+                <span>Pipe</span>
+                <span>(item ID:12)</span>
+            </td>
+            <td class="table-row">10</td>
+            <td class="table-row">0</td>
+            <td class="table-row">
+                <span><input type="number" value="0" min="0"></span>
+            </td>
+            <td class="table-row">10</td>
+            </tr>
+             <tr>
+            <td scope="row" class="firstrow">
+                <span>Pipe</span>
+                <span>(item ID:12)</span>
+            </td>
+            <td class="table-row">10</td>
+            <td class="table-row">0</td>
+            <td class="table-row">
+                <span><input type="number" value="0" min="0"></span>
+            </td>
+            <td class="table-row">5</td>
+            </tr>
+             <tr>
+            <td scope="row" class="firstrow">
+                <span>Pipe</span>
+                <span>(item ID:12)</span>
+            </td>
+            <td class="table-row">5</td>
+            <td class="table-row">0</td>
+            <td class="table-row">
+                <span><input type="number" value="0" min="0"></span>
+            </td>
+            <td class="table-row">3</td>
+            </tr>
+
+        </tbody>
+        </table>
+    </div>
+    <div class="note">
+        <div>
+            <i class="fa-solid fa-circle-info"></i>
+        </div>
+        <div>
+            <span>- You can only receive up to the remaining quantity.</span>
+             <span>- Receiving items will update the stock and change the purchase status if all items are received.</span> 
+        </div>
+    </div>
+    <div class="cancel_receive_button">
+        <a href="{% url 'purchase' %}" class="cancel_button">Cancel</a>
+        <button type="submit">
+            <i class="fa-solid fa-truck"></i>Receive
+        </button>
+    </div>
+ </main>
+
+{% endblock content %}
