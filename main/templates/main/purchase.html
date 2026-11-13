@@ -24,244 +24,196 @@
       body{
         background-color: rgba(0,0,0,0.01)
       }
+  .popup{
+      position: relative;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: white;
+      width: min(500px, 100%);
+      max-height: 500px;
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      border-radius: 12px;
+      margin-top: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+    @media(min-height:800px){
       .popup{
-        position: relative;
-        background-color: white;
-        width: min(500px, 100%);
-        max-height: calc(100vh - 32px);
-        overflow-y: auto;
-        box-sizing: border-box;
-        border-radius: 8px;
-        z-index:2000;
-        margin-top:50px
+        max-height: 800px;
        
       }
-      .popup .title{
-        margin: 12px 16px;
-        padding-bottom: 10px;
-      }
-      .popup .title span{
-        font-size: 22px;
-      }
-      .popup form{
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 8px 16px;
-        padding: 0 16px 12px;
+    }
       
-      }
-      .popup .input_container{
-        min-width: 0;
-      }
-      .popup .input_container label{
-        margin-left: 0;
-      }
-      .popup .input_container input{
-        box-sizing: border-box;
-        margin: 4px 0;
-      }
-      .popup .input_container textarea{
-        box-sizing: border-box;
-        min-height: 48px;
-        margin: 4px 0;
-        padding: 8px;
-        font-size: 14px;
-      }
-      .popup .input_container textarea::placeholder{
-        font-size: 14px;
-      }
-      .popup .cancel_save_button{
-        grid-column: 1 / -1;
-        margin-top: 4px;
-      }
-      .popup .cancel_save_button .submit_button,
-      .popup .submit_cancel_button{
-        margin: 10px 8px;
-      }
-      .popup .cancel_save_button .submit_button{
-        outline: none;
-        border: none;
-      }
-      @media (max-width: 520px){
-        .popup .cancel_save_button{
-          grid-column: 1;
-        }
-      }
-      .overlay {
-          position: fixed;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 16px;
-          box-sizing: border-box;
-          background-color: rgba(0, 0, 0, 0.5);
-          z-index: 1000;
-          opacity: 0;
-          visibility: hidden;
-          transition: all ease 0.3s;
-          pointer-events: none;
-      }
-     
-      .title{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin:25px 10px;
-        border-bottom: 1px solid rgba(180, 180, 180, 0.3); 
-        padding-bottom: 20px;
-      }
-      .title span{
-        font-family: sans-serif;
-        font-weight: 700;
-        font-size: 25px;
-      }
-      .title span i{
-        font-size: 35px;
-        margin-right: 20px;
-        transform: translateY(7px);
-      }
-      .popup .title div label{
+  
+    .popup::-webkit-scrollbar{
+      display: none;
+    }
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
-        margin-right: 8px;
-      }
-     
-      .popup .title div label i{
-        font-size: 14px;
-        color: #888;
-        cursor: pointer;
-      
-      }
-      .title div label:hover{
-        background-color:rgba(243, 244, 246,0.5);
-        border-radius: 25px;
-      }
-      .title div label:active{
-       background-color: rgba(243,244,246,0.2);
-      }
-      
-      .input_container{
-        display: flex;
-        flex-direction: column;
-       
-        
+        padding: 24px;
+        box-sizing: border-box;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    .inventoryTitle:has(#check:checked) ~ .overlay{
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
 
+      .purchase_title{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0;
+        padding: 20px 24px;
+        border-bottom: 1px solid rgb(242, 243, 245);
       }
-      .input_container input{
-        padding: 10px 10px;
-        margin:10px 20px;
-        border: 1px solid rgba(180, 180, 180, 0.5);
-        border-radius: 7px;
-        box-shadow:inset 0px 1px 8px rgba(0, 0, 0, 0.1);
-        outline: none;
-        outline: none;
-        transition: all  0.03s ease;
-      }
-      .input_container input::placeholder{
-        font-size: 14px;
-        font-weight: 550;
-      }
-      
-      .input_container label{
-        font-family: sans-serif;
-        font-weight: 700;
-        margin-left: 20px;
-      }
-      
-      .input_container textarea{
-        margin: 5px 20px;
-        border: 1px solid #ccc;
-        border-radius: 7px;
-        padding: 10px 0 30px 10px;
-        outline: none;
-        box-shadow: inset 0 2px 8px rgba(0,0,0, 0.2);
-        font-size: 20px;
-      }
-      .input_container textarea::placeholder{
-        font-size: 16px;
-      }
-      .input_container span{
-        color: red;
-      }
-      .items .titleName .quantity{
-        margin-right: 220px;
-      }
-      .items .titleName .item{
-        margin-left: 5px;
-      }
-      .item-row{
-        display: grid;
-        grid-template-columns: 1fr 1fr 50px;
-        column-gap: 15px;
-        margin-left: 20px;
+    .purchase_title span{
+      font-weight: bolder;
+      font-size: 20px;
+    }
+    .purchase_title label i{
+      font-size: 14px;
+      color: rgb(131, 135, 146);
+      cursor: pointer;
+    }
+    .supplierchoice{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin: 20px 24px 0;
+    }
+    .supplierchoice label{
+      font-weight: 600;
+    }
+    .supplierchoice input{
+      box-sizing: border-box;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 7px;
+      outline: none;
+      border: 2px solid rgb(234, 235, 238);
+    }
 
-      }
-    
-      .item-row .itemName,
-      .item-row .itemquantity{
-        padding: 10px 10px;
-        margin:10px 0px;
-        border: 1px solid rgba(180, 180, 180, 0.5);
-        border-radius: 7px;
-        outline: none;
-      }
-      .item-row .itemquantity{
-        width: 200px;
-      }
-      .item-row i{
-        display: flex;
-        align-items: center;
-        color: red;
-        font-size: 20px;
-      }
-      .add_button{
-        margin: 20px;
-      }
-      .add_item_button{
-        border: 2px solid rgb(103, 159, 255);
-        color: rgba(74, 134, 235);
-        padding: 10px 15px;
-        border-radius: 7px;
-        cursor: pointer;
-      }
-      .add_item_button:active {
-        background-color: rgb(103, 159, 255);
-        color: white;
-      }
-      .cancel_save_button{
-        margin-top: 50px;
-        border-top: 1px solid rgba(180, 180, 180, 0.7);
-        display: flex;
-        justify-content: right;
-        align-items: center;
-      }
-      
-      .cancel_save_button .submit_button{
-        padding: 10px 20px;
-        background-color:rgba(30, 102, 221) ;
-        color: white;
-        border-radius: 5px;
-        margin:15px 20px;
-        font-weight: 700;
-        cursor: pointer;
-      }
-      .cancel_save_button .submit_button i{
-        margin-right: 5px;
-        font-size: 20px;
-      }
-      .submit_cancel_button{
-        padding: 10px 20px;
-        background-color:rgba(180,180,180,0.3) ;
-        color: black;
-        border-radius: 5px;
-        font-weight: 700;
-        margin:15px 20px;
-        border: 1px solid rgba(180,180,180,1);
-        cursor: pointer;
+    .items{
+     margin: 20px 24px 12px;
+    }
+    .items div:first-child{
+      font-weight: bolder;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .items div:last-child{
+      background-color: rgb(236, 241, 247);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 30px;
+      column-gap: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+     .item-row{
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 30px;
+      column-gap: 10px;
+      align-items: center;
+      margin: 10px 24px;
+    }
+    .item-row i{
+      cursor: pointer;
+    }
+    .item-row input{
+      box-sizing: border-box;
+      width: 100%;
+      min-width: 0;
+      border:2px solid rgb(234, 235, 238);
+      padding:10px 12px;
+      border-radius: 8px;
+    }
+   
+  .delete-item{
+    color: red;
+  }
+  .addItem_button{
+    border: 2px solid rgb(53, 103, 186);
+    color:rgb(53, 103, 186);
+    padding: 8px 10px;
+    border-radius: 5px;
+    background-color: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition:all ease 0.3s;
+    margin: 4px 24px 20px;
+  }
+  .addItem_button:hover{
+    background-color:rgb(53, 103, 186) ;
+    color: white;
+  }
+  .addItem_button:active{
+    opacity: 0.7;
+  }
+  .addItem_button i{
+    margin-right: 7px;
+  }
+  .cancel_save_button{
+    margin: 0;
+    border-top: 1px solid rgb(242, 243, 245);
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 24px;
+    column-gap: 10px;
+  }
+ .cancel_save_button .cancel_button{
+  padding: 10px 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  background-color: white;
+ }
+ .cancel_save_button .save_button{
+  border: none;
+  background-color: rgb(32, 104, 215);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+ }
+      @media (max-width: 600px) {
+        .overlay {
+          padding: 12px;
+        }
+        .popup {
+          max-height: calc(100vh - 24px);
+        }
+        .purchase_title {
+          padding: 16px;
+        }
+        .supplierchoice {
+          margin: 16px 16px 0;
+        }
+        .items {
+          margin: 16px;
+        }
+        .item-row {
+          margin: 10px 16px;
+        }
+        .addItem_button {
+          margin: 4px 16px 16px;
+        }
+        .cancel_save_button {
+          padding: 12px 16px;
+        }
       }
       .inventoryTitle{
         display: flex;
@@ -548,7 +500,7 @@
        <div class="inventoryTitle_second">
           <input type="checkbox" id="check">
           <label for="check">
-            <span><i class="fa-solid fa-plus"></i> Add Item</span>
+             <span><i class="fa-solid fa-plus"></i> Add Purchase</span>
           </label>
         </div>
     
@@ -707,62 +659,82 @@
       </div>
     </div>
 
-      
-      <div class="overlay">
-        <div class="popup">
-          <div>
-              <div class="title">
-
-                <span><i class="fa-solid fa-cube"></i> Add New Item</span>
-                <div>
-                  <label for="check">
-                    <i class="fa-solid fa-x"></i>
-                  </label>
-                  
-              </div>
-              </div>
-          
-   
-         <form action="{% url 'stock' %}" method="POST">
-           {% csrf_token %}
-               
-                  <div class="input_container">
-                    <label for="supplier">Item Name  <span>*</span></label>
-                    <input type="text" placeholder="Enter item name(e.g Pipes,Meters)" id="item_name" name="item_name" required>
-                  </div>
-
-                  <div class="input_container">
-                    <label for="supplier">Supplier/Entered By <span>*</span></label>
-                    <input type="text" placeholder="Enter Supplier Name/Enter the name of the person" id="supplier" name="supplier" required>
-                  </div>
-                  <div class="input_container">
-                    <label for="supplier">Quantity <span>*</span></label>
-                    <input type="text" placeholder="Enter Quantity" id="quantity" name="quantity" value="0" required>
-                  </div>
-                  
-                  <div class="input_container">
-                    <label for="supplier">Description (Optional)</label>
-                    <textarea name="" id="" placeholder="Enter Item description (optional)"></textarea>
-                  </div>
-      
-                <div class="cancel_save_button">
-                  <label for="check">
-                    <span  class="submit_cancel_button">Cancel</span>
-                  </label>
-                  <button  class="submit_button" type="submit">
-                    <i class="fa-regular fa-floppy-disk"></i>
-                    Save Item
-                  </button>
-                </div>
-            </div>
-          </form>
-
-
-
+        <div class="overlay">
+      <div class="popup">
+          <div class="purchase_title">
+          <span>Add Purchase</span>
+         
+            <label for="check" aria-label="Close add purchase dialog">
+              <i class="fa-solid fa-x"></i>
+            </label>
           </div>
-        </div>
+            
+
+        
+  
+            <form action="{% url 'purchase' %}" method="POST">
+              {% csrf_token %}
+              <div class="supplierchoice">
+                  <label for="supplier">Supplier</label>
+                  <input type="text" placeholder="Enter Supplier" id="supplier" name="supplier" required>
+              </div>
+            
+              <div class="items">
+                <div>Items</div>
+                <div>
+                    <span>Item</span>
+                    <span>Quantity</span>
+                </div>
+              </div>
+
+              <div id="itemRows">
+                <div class="item-row">
+                  <input type="text" name="item" required placeholder="item" required>
+                  <input type="number" name="quantity" required placeholder="quantity" required>
+                  <i class="fa-solid fa-trash-can delete-item"></i>
+                </div>
+              </div>
+             
+              
+              <button id="addItem" type="button" class="addItem_button"><i class="fa-solid fa-plus"></i>Add Another Item</button>
+               
+              <div class="cancel_save_button">
+                  <label for="check" class="cancel_button">Cancel</label>
+                  <button type="submit" class="save_button">Save Purchase</button>
+              </div>
+              
+             </form>
+      </div>
+    </div>
+      
       </div>
   
-  
+   <script>
+      const addItem = document.getElementById('addItem');
+      const itemRows = document.getElementById('itemRows');
+      
+      
+      addItem.addEventListener('click',function(){
+        const newRow = document.createElement('div')
+        newRow.classList.add('item-row');
+        newRow.innerHTML = `
+                <input type="text" name = 'item' required  placeholder="item" required>
+                <input type="number" name = 'quantity' required  placeholder="quantity" required>
+                  <i class="fa-solid fa-trash-can delete-item"  type="button"></i>
+                `;
+        itemRows.appendChild(newRow);
+        
+      });
+
+      itemRows.addEventListener('click', function(event) {
+
+      if (event.target.classList.contains('delete-item')) {
+
+          event.target.parentElement.remove();
+
+      }
+
+      });
+    </script>
 
 {% endblock content %}
