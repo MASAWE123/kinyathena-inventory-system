@@ -110,10 +110,7 @@ def receive(request,purchase_id):
       stock.quantity += int(quantity_received)
       stock.save()
 
-      stockin = StockIn.objects.create(
-        item=item.item.strip(),
-        quantity = int(quantity_received)
-      )
+    
       StockMovements.objects.create(
               item=item.item,
               quantity = int(quantity_received),

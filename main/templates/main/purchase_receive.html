@@ -58,7 +58,7 @@
     .receivePage_status .secondpart div{
         display: grid;
         grid-template-columns: 1fr 1fr;
-        width: 250px;
+        width: 280px;
     }
     .receivePage_status .firstpart div span:first-child,
     .receivePage_status .secondpart div span:first-child{
@@ -156,6 +156,33 @@
    .cancel_receive_button button i{
      margin-right: 7px;
    }
+   .status_pending{
+          display: inline-flex;
+          padding: 3px 1px 3px 39px;
+          border-radius: 20px;
+          background:rgb(253, 221, 222);
+          color: rgb(220, 80, 77);
+          font-size: 15px;
+          font-weight: 600;
+     }
+   .status_partial{
+          display: inline-flex;
+          padding: 3px 1px 3px 45px;
+          border-radius: 20px;
+          background:rgb(254, 237, 202);
+          color: rgb(199, 116, 43);
+          font-size: 15px;
+          font-weight: 600;
+   }
+   .status_received{
+          display: inline-flex;
+          padding: 3px 1px 3px 39px;
+          border-radius: 20px;
+          background:rgb(207, 238, 220);
+          color: rgb(54, 121, 68);
+          font-size: 15px;
+          font-weight: 600;
+   }
  </style>
 </head>
 <body style="background-color: #f5f5f5;">
@@ -168,32 +195,40 @@
       <div class="firstpart">
 
        <div class="purchase_id">
-        <span>Purchase:</span> <span>7</span>
+        <span>PurchaseID:</span> <span>{{purchase.id}}</span>
        </div>
 
         <div class="supplier">
-        <span>Supplier:</span> <span>ABC Pipes Ltd</span>
+        <span>Supplier:</span> <span>{{purchase.supplier}}</span>
        </div>
         <div class="date_ordered">
-        <span>Date Ordered:</span> <span>2025-09-15</span>
+        <span>Date Ordered:</span> <span>{{purchase.date_ordered |date:"M.d,y,H:i"}}</span>
        </div>
 
       </div>
 
       <div class="secondpart">
         <div class="status">
-        <span>Status:</span> <span>Pending</span>
+        {% if purchase.status == 'pending' %}
+          <span>Status:</span> <span class="status_pending">{{purchase.status}}</span>
+        {% elif purchase.status == 'partial' %}
+           <span>Status:</span> <span class="status_partial">{{purchase.status}}</span>
+        {% else %}
+            <span>Status:</span> <span class="status_received">{{purchase.status}}</span>
+        {% endif %}
        </div>
 
         <div class="total_items">
-        <span>Total Items:</span> <span>3</span>
+        <span>Total Items:</span> <span>{{purchaseItem.count}}</span>
        </div>
        
       </div>
 
 
     </div>
-    <div class="purchase-table">
+    <form action="{% url 'receive' purchase.id %}" method="POST">
+        {% csrf_token %}
+       <div class="purchase-table">
         <table class="table table-bordered">
         <thead>
             <tr class="table_header">
@@ -205,47 +240,26 @@
             </tr>
         </thead>
         <tbody>
+         {% for item in purchaseItem %}
             <tr>
             <td scope="row" class="firstrow">
-                <span>Pipe</span>
-                <span>(item ID:12)</span>
+                <span>{{item.item}}</span>
+                <span>(item ID:{{item.id}})</span>
             </td>
-            <td class="table-row">10</td>
-            <td class="table-row">0</td>
+            <td class="table-row">{{item.quantity_ordered}}</td>
+            <td class="table-row">{{item.quantity_received}}</td>
             <td class="table-row">
-                <span><input type="number" value="0" min="0"></span>
+                <span><input type="number" value="0" name="receive_{{item.id}}" min="0" max="{{item.remaining}}"></span>
             </td>
-            <td class="table-row">10</td>
+            <td class="table-row">{{item.remaining}}</td>
             </tr>
-             <tr>
-            <td scope="row" class="firstrow">
-                <span>Pipe</span>
-                <span>(item ID:12)</span>
-            </td>
-            <td class="table-row">10</td>
-            <td class="table-row">0</td>
-            <td class="table-row">
-                <span><input type="number" value="0" min="0"></span>
-            </td>
-            <td class="table-row">5</td>
-            </tr>
-             <tr>
-            <td scope="row" class="firstrow">
-                <span>Pipe</span>
-                <span>(item ID:12)</span>
-            </td>
-            <td class="table-row">5</td>
-            <td class="table-row">0</td>
-            <td class="table-row">
-                <span><input type="number" value="0" min="0"></span>
-            </td>
-            <td class="table-row">3</td>
-            </tr>
-
+        {% endfor %}
+         
         </tbody>
         </table>
-    </div>
-    <div class="note">
+       </div>
+   
+      <div class="note">
         <div>
             <i class="fa-solid fa-circle-info"></i>
         </div>
@@ -253,13 +267,14 @@
             <span>- You can only receive up to the remaining quantity.</span>
              <span>- Receiving items will update the stock and change the purchase status if all items are received.</span> 
         </div>
-    </div>
-    <div class="cancel_receive_button">
+      </div>
+      <div class="cancel_receive_button">
         <a href="{% url 'purchase' %}" class="cancel_button">Cancel</a>
         <button type="submit">
             <i class="fa-solid fa-truck"></i>Receive
         </button>
-    </div>
+      </div>
+    </form>
  </main>
 
 {% endblock content %}
