@@ -131,6 +131,7 @@ def receive(request,purchase_id):
       StockMovements.objects.create(
               item=item.item,
               quantity = int(quantity_received),
+              supplier_issued_to = purchase.supplier.supplier,
               movement = 'in',
               reason='Nal'
     )
