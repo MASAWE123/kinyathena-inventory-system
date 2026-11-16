@@ -112,7 +112,8 @@ a{
  {% if request.resolver_match.url_name == 'stockmovements' or request.resolver_match.url_name == 'stockmovements_details'%}checked {% endif %}>
  <input type="radio" name="radio" id="purchases"
  {% if request.resolver_match.url_name == 'purchase' or request.resolver_match.url_name == 'receive' %} checked {% endif %}>
- <input type="radio" name="radio" id="suppliers">
+ <input type="radio" name="radio" id="suppliers"
+ {% if request.resolver_match.url_name == 'supplier' %} checked {% endif %}>
  <input type="radio" name="radio" id="report">
  <div class="slider"></div>
 <div class="nav-sidebar">
@@ -142,7 +143,9 @@ a{
   </label>
 
   <label for="suppliers">
-    <i class="fa-solid fa-users"></i>Suppliers
+    <a href="{% url 'supplier' %}" onclick="moveSlider(event, 'suppliers', this.href)">
+      <i class="fa-solid fa-users"></i>Suppliers
+    </a>
   </label>
 
   <label for="report">

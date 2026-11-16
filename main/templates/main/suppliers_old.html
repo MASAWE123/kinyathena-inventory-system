@@ -1,0 +1,96 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<style>
+
+  .supplier .table{
+    margin-top: 4%;
+    margin-right:100px;
+  }
+.addSupplier{
+  display: flex;
+  justify-content: space-between;
+  margin-right: 20px;
+  margin-top: 150px;
+}
+.addSupplier span{
+  font-weight: 700;
+  font-size: 25px;
+}
+.addSupplier button{
+  border: none;
+  background-color: green;
+  height: 50px;
+  cursor: pointer;
+  padding: 0 20px;
+  border-radius: 30px;
+  font-weight: 500;
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+.addSupplier button:hover{
+ opacity: 0.7;
+}
+.addSupplier button:active{
+  opacity: 0.5;
+}
+.total span{
+  font-size: 20px;
+  font-weight: 700;
+  margin-right:10px;
+}
+.total:last-child{
+  font-size: 10px;
+}
+.status{
+  font-weight: 700;
+  font-size: 20px;
+}
+.status span{
+  margin-right: 20px;
+}
+
+</style>
+
+<div class="addSupplier">
+  <span>Supplier</span>
+  <button>Add Supplier</button>
+</div>
+
+<div class="supplier" style="margin-right: 20px;">
+  <table class="table table-striped"  >
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Supplier</th>
+      <th scope="col">Contact Person</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for supplier in suppliers  reversed %}
+    <tr>
+      <th scope="row">{{supplier.id}}</th>
+      <td>{{supplier.supplier}}</td>
+      <td>{{supplier.contact}}</td>
+      <td>{{supplier.phone}}</td>
+      {% if supplier.status %}
+      <td>Active</td>
+      {% else %}
+      <td>Inactive</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="total">
+  <span>Total Suppliers:</span>
+  <span>{{suppliers_count}}</span>
+</div>
+<div class="status">
+  <span>Active : {{suppliers_active}}</span>
+  <span>Inactive : {{suppliers_inactive}}</span>
+</div>
+</div>
+{% endblock %}

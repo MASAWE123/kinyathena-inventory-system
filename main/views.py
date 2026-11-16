@@ -19,11 +19,21 @@ def home(request):
   return render(request,'main/dashboard.html',context)
 
 def supplierPage(request):
-  suppliers = Suppliers.objects.all()[:10]
+  suppliers = Suppliers.objects.all()
   suppliers_count= Suppliers.objects.count()
   suppliers_active = Suppliers.objects.filter(status=True).count()
   suppliers_inactive = Suppliers.objects.filter(status=False).count()
-  context ={'suppliers':suppliers,'suppliers_count':suppliers_count,'suppliers_active':suppliers_active,'suppliers_inactive':suppliers_inactive}
+
+  paginator = Paginator(suppliers,7)
+  page_number = request.GET.get("page")
+  page_obj = paginator.get_page(page_number)
+  context ={
+    'suppliers':suppliers,
+    'suppliers_count':suppliers_count,
+    'suppliers_active':suppliers_active,
+    'suppliers_inactive':suppliers_inactive,
+    'page_obj':page_obj
+    }
   return render(request,'main/suppliers.html',context)
 
 def purchasePage(request):
