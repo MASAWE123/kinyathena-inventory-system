@@ -136,7 +136,14 @@ def receive(request,purchase_id):
               reason='Nal'
     )
 
- 
+      supplier,created= Suppliers.objects.get_or_create(
+         supplier = purchase.supplier.supplier
+        )
+      supplierItem = supplierItems.objects.create(
+      supplier=supplier,
+      itemName =item.item,
+      quantity = int(quantity_received),
+       )
    
 
       
@@ -383,4 +390,22 @@ def stockMovements_details(request, movementid):
 
 
 def supplierItem(request,supplierid):
-    return render(request,'main/supplier_item_page.html')
+    supplier = Suppliers.objects.get(id=supplierid)
+    supplierItem = supplier.supplierItems.all()
+
+    search = request.GET.get('q')
+
+    if search:
+      supplierItem = supplier.supplierItems.filter(
+        Q(itemName__icontains = search) | Q(quantity__icontains = search)
+      )
+
+    paginator = Paginator(supplierItem,7)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context ={
+      'supplier':supplier,
+      'supplierItem':supplierItem,
+      'page_obj':page_obj,
+    }
+    return render(request,'main/supplier_item_page.html',context)

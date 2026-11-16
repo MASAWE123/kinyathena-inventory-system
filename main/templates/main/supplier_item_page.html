@@ -309,7 +309,7 @@ body{
 
             <div>
                 <h2>Supplier Items</h2>
-                <p>Items supplied by Nairobi Water Supplies</p>
+                <p>Items supplied by {{supplier.supplier}}</p>
             </div>
         </div>
 
@@ -318,7 +318,7 @@ body{
 
                 <div class="summary-item-first">
                    <span>Supplier:</span>
-                   <span>Nairobi Water Supplies</span>
+                   <span>{{supplier.supplier}}</span>
                 </div>
 
                 <div class="summary-item">
@@ -328,7 +328,7 @@ body{
                     <div class="summary-content">
                         <span>Phone</span>
                         
-                        <h3><small>0722986654</small></h3>
+                        <h3><small>{{supplier.phone}}</small></h3>
                        
                     </div>
                 </div>
@@ -340,13 +340,13 @@ body{
                     <div class="summary-content">
                         <span>Contact Person</span>
                         
-                        <h3><small >Grace Wanjiku</small></h3>
+                        <h3><small >{{supplier.contact}}</small></h3>
                        
                     </div>
                 </div>
         </div>
 
-          <form action="{% url 'supplier' %}" method="GET">
+    <form action="{% url 'supplierItem' supplier.id %}" method="GET">
       {% csrf_token %}
       <div class="search">
 
@@ -368,30 +368,25 @@ body{
       <div class="recent-title">
         <div><a class="current-stock-link" href="{% url 'supplier' %}?q=#recent-inventory-table">Suppliers</a></div>
         
-    
       </div>
       <table class="table" id="inventory-table">
         <thead>
           <tr>
             <th  scope="col">#</th>
-            <th scope="col">Supplier</th>
-            <th scope="col">Contact Person</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Action</th>
+            <th scope="col">Item Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Date</th>
+           
           </tr>
         </thead>
         <tbody>
-          {% for supplier in page_obj.object_list %}
-          
+          {% for supplieritem in page_obj.object_list %}
+         
           <tr>
-            <th scope="row">{{supplier.id}}</th>
-            <td>{{supplier.supplier}}</td>
-            <td>{{supplier.contact}}</td>
-            <td>{{supplier.phone}}</td>
-            <td class="Action">
-               <a type="button" class="btn btn-outline-primary" href="{% url 'supplierItem' supplier.id %}">View </a>
-            </td>
-          
+            <th scope="row">{{supplieritem.id}}</th>
+            <td>{{supplieritem.itemName}}</td>
+            <td>{{supplieritem.quantity}}</td>
+            <td>{{supplieritem.date_supplied}}</td>
           </tr>
          {% endfor %}
 
