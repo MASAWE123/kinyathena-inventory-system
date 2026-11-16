@@ -136,6 +136,7 @@ def receive(request,purchase_id):
               reason='Nal'
     )
 
+ 
    
 
       
@@ -379,3 +380,7 @@ def stockMovements_details(request, movementid):
       'stock':stock,
     }
     return render(request, 'main/stock_movement_details.html',context)
+
+
+def supplierItem(request,supplierid):
+    return render(request,'main/supplier_item_page.html')

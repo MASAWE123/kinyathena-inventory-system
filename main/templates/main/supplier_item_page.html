@@ -1,0 +1,432 @@
+{% extends 'main/base.html' %}
+{% block content %}
+ <style>
+
+ .movement-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background: #f8faff;
+    border: 1px solid #cbdcff;
+    border-radius: 10px;
+    padding: 10px 10px;
+    margin-top: 5px;
+}
+.summary-item-first{
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    border-right: 1px solid #d5e0f1;
+    font-weight: 700;
+}
+.summary-item-first span:last-child{
+    color:rgb(23, 77, 151);
+}
+
+.summary-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 10px 15px;
+    border-right: 1px solid #d5e0f1;
+    min-width: 0;
+    
+}
+
+.summary-item:last-child {
+    border-right: none;
+}
+
+.summary-icon {
+    /* color: #075bdc; */
+    font-size: 25px;
+    background: #e6efff;
+    border-radius: 50%;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.summary-content span {
+    /* color: #075bdc; */
+    font-size: 16px;
+    display: block;
+    margin-bottom: -3px;
+}
+
+.summary-content h3 {
+    font-size: 20px;
+    color: #071e52;
+    font-weight: 700;
+    margin: 0;
+}
+
+.summary-content small {
+    font-size: 15px;
+    color: #53647e;
+}
+
+
+.page-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 9px 14px;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    color: #334155;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.back-button:hover {
+    background: #f1f5f9;
+    color: #075bdc;
+}
+
+.page-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.title-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e6efff;
+    border-radius: 10px;
+    color: #0866e9;
+    font-size: 23px;
+    flex-shrink: 0;
+}
+
+.page-title h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #071e52;
+    margin: 0 0 6px;
+}
+
+.page-title p {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0;
+}
+
+
+/* =========================
+   SEARCH SECTION
+========================= */
+
+.search {
+    background-color: white;
+    border-radius: 7px;
+    margin-right: 20px;
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.3);
+    padding: 10px 30px;
+    display: grid;
+    column-gap: 10px;
+    margin-top: 10px;
+    grid-template-columns: 10fr 1fr;
+}
+
+.search .select-suppliers {
+    display: flex;
+    border: 2px solid #ccc;
+    align-items: center;
+    border-radius: 7px;
+}
+
+.search #suppliers {
+    outline: none;
+    width: 100%;
+    border: none;
+    background-color: white;
+}
+
+.search button {
+    width: 100px;
+}
+
+.search-button {
+    display: flex;
+    border: 2px solid #ccc;
+    gap: 10px;
+    align-items: center;
+    padding: 5px;
+    border-radius: 7px;
+}
+
+.search-button input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #4e4b4b;
+}
+
+.search-button input::placeholder {
+    font-size: 14px;
+    transform: translateY(-2px);
+}
+
+.search-button i {
+    color: #888;
+}
+
+
+/* =========================
+   RECENT INVENTORY TABLE
+========================= */
+
+.recent-inventory-table {
+    border: 2px solid rgba(222, 226, 230);
+    margin-right: 20px;
+    padding: 10px 20px;
+    margin-top: 15px;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+/* Table heading */
+
+.recent-inventory-table .recent-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -5px;
+}
+
+.recent-inventory-table .recent-title div:first-child {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.recent-inventory-table .current-stock-link {
+    display: inline;
+    color: inherit;
+    text-decoration: none;
+}
+
+.recent-inventory-table .recent-title div:last-child {
+    transform: translateY(6px);
+}
+
+
+/* Add button */
+
+.inventoryTitle_second label span {
+    background-color: rgba(14, 113, 229);
+    padding: 10px 20px;
+    color: white;
+    border-radius: 7px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.inventoryTitle_second label span i {
+    margin-right: 2px;
+}
+
+.inventoryTitle_second input {
+    display: none;
+}
+
+
+/* Table */
+
+.recent-inventory-table .table {
+    margin-top: 17px;
+    border: 2px solid rgba(222, 226, 230);
+    border-radius: 7px;
+    padding: 10px;
+    text-align: center;
+}
+
+.recent-inventory-table .table thead tr th {
+    background-color: rgba(237, 243, 249);
+}
+
+
+/* Pagination section */
+
+.recent-inventory-table .last-part {
+    display: flex;
+    justify-content: space-between;
+    margin-top: -13px;
+    align-items: center;
+}
+
+.recent-inventory-table .last-part .action {
+    transform: translateY(15px);
+}
+
+
+/* Action buttons */
+
+.Action {
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+}
+
+.Action a {
+    width: 100px;
+}
+
+body{
+    background-color:rgba(255,255,255,0.1);
+}
+  </style>
+<main style="margin: 20px;">
+
+        <div class="page-header">
+
+        <a href="{% url 'supplier' %}" class="back-button">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Supplier Page
+        </a>
+
+        <div class="page-title">
+            <div class="title-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div>
+                <h2>Supplier Items</h2>
+                <p>Items supplied by Nairobi Water Supplies</p>
+            </div>
+        </div>
+
+        </div>
+         <div class="movement-summary">
+
+                <div class="summary-item-first">
+                   <span>Supplier:</span>
+                   <span>Nairobi Water Supplies</span>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span>Phone</span>
+                        
+                        <h3><small>0722986654</small></h3>
+                       
+                    </div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span>Contact Person</span>
+                        
+                        <h3><small >Grace Wanjiku</small></h3>
+                       
+                    </div>
+                </div>
+        </div>
+
+          <form action="{% url 'supplier' %}" method="GET">
+      {% csrf_token %}
+      <div class="search">
+
+       <div class="search-button">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search Items by name,supplier" name="q" id="search" >
+        <!-- value="{{ search_stock_movements }}"> -->
+       </div>
+
+     
+       <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-magnifying-glass"></i> Search
+       </button>
+  
+    </div>
+    </form>
+
+    <div class="recent-inventory-table" id="recent-inventory-table">
+      <div class="recent-title">
+        <div><a class="current-stock-link" href="{% url 'supplier' %}?q=#recent-inventory-table">Suppliers</a></div>
+        
+    
+      </div>
+      <table class="table" id="inventory-table">
+        <thead>
+          <tr>
+            <th  scope="col">#</th>
+            <th scope="col">Supplier</th>
+            <th scope="col">Contact Person</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for supplier in page_obj.object_list %}
+          
+          <tr>
+            <th scope="row">{{supplier.id}}</th>
+            <td>{{supplier.supplier}}</td>
+            <td>{{supplier.contact}}</td>
+            <td>{{supplier.phone}}</td>
+            <td class="Action">
+               <a type="button" class="btn btn-outline-primary" href="{% url 'supplierItem' supplier.id %}">View </a>
+            </td>
+          
+          </tr>
+         {% endfor %}
+
+        </tbody>
+      </table>
+
+      <div class="last-part">
+        <div class="last-part-start">
+          Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} pages
+        </div>
+
+        <div class="action">
+        <nav aria-label="...">
+            <ul class="pagination">
+              {% if page_obj.has_previous %}
+              <li class="page-item"><a href="?&page={{ page_obj.previous_page_number }}#inventory-table" class="page-link">Previous</a></li>
+              {% endif %}
+              {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                  <li class="page-item active"><a class="page-link" href="?&page={{ num }}#inventory-table">{{ num }}</a></li>
+                {% else %}
+                  <li class="page-item"><a class="page-link" href="?page={{ num }}#inventory-table">{{ num }}</a></li>
+                {% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}#inventory-table">Next</a></li>
+              {% endif %}
+            </ul>
+        </nav>
+        </div>
+    
+      </div>
+    </div>
+
+        
+           
+  </main>
+{% endblock content %}

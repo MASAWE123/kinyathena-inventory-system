@@ -492,7 +492,7 @@
     font-size: 15px;
     font-weight: 600;
     }
-      </style>
+</style>
 
   
     <div class="inventoryTitle">
@@ -551,7 +551,7 @@
             <td>{{supplier.contact}}</td>
             <td>{{supplier.phone}}</td>
             <td class="Action">
-               <a type="button" class="btn btn-outline-primary" href="#">View </a>
+               <a type="button" class="btn btn-outline-primary" href="{% url 'supplierItem' supplier.id %}">View </a>
             </td>
           
           </tr>
@@ -588,60 +588,6 @@
       </div>
     </div>
 
-      
-      <div class="overlay">
-        <div class="popup">
-          <div>
-              <div class="title">
-
-                <span><i class="fa-solid fa-cube"></i> Add New Item</span>
-                <div>
-                  <label for="check">
-                    <i class="fa-solid fa-x"></i>
-                  </label>
-                  
-              </div>
-              </div>
-          
-   
-         <form action="{% url 'stock' %}" method="POST">
-           {% csrf_token %}
-               
-                  <div class="input_container">
-                    <label for="supplier">Item Name  <span>*</span></label>
-                    <input type="text" placeholder="Enter item name(e.g Pipes,Meters)" id="item_name" name="item_name" required>
-                  </div>
-
-                  <div class="input_container">
-                    <label for="supplier">Supplier/Entered By <span>*</span></label>
-                    <input type="text" placeholder="Enter Supplier Name/Enter the name of the person" id="supplier" name="supplier" required>
-                  </div>
-                  <div class="input_container">
-                    <label for="supplier">Quantity <span>*</span></label>
-                    <input type="text" placeholder="Enter Quantity" id="quantity" name="quantity" value="0" required>
-                  </div>
-                  
-                  <div class="input_container">
-                    <label for="supplier">Description (Optional)</label>
-                    <textarea name="" id="" placeholder="Enter Item description (optional)"></textarea>
-                  </div>
-      
-                <div class="cancel_save_button">
-                  <label for="check">
-                    <span  class="submit_cancel_button">Cancel</span>
-                  </label>
-                  <button  class="submit_button" type="submit">
-                    <i class="fa-regular fa-floppy-disk"></i>
-                    Save Item
-                  </button>
-                </div>
-            </div>
-          </form>
-
-
-
-          </div>
-        </div>
       </div>
   
   
