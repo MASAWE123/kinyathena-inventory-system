@@ -24,6 +24,13 @@ def supplierPage(request):
   suppliers_active = Suppliers.objects.filter(status=True).count()
   suppliers_inactive = Suppliers.objects.filter(status=False).count()
 
+  search = request.GET.get('q','').strip()
+
+  if search:
+    suppliers = Suppliers.objects.filter(
+      Q(supplier__icontains = search) | Q(contact__icontains = search) | Q(phone__icontains = search)
+    )
+
   paginator = Paginator(suppliers,7)
   page_number = request.GET.get("page")
   page_obj = paginator.get_page(page_number)
