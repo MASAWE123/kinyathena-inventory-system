@@ -58,7 +58,7 @@
 #suppliers:checked ~ .slider{
   top: calc(400px * 4/6);
 }
-#report:checked ~ .slider{
+#asset:checked ~ .slider{
   top: calc(400px * 5/6);
 }
 
@@ -114,7 +114,8 @@ a{
  {% if request.resolver_match.url_name == 'purchase' or request.resolver_match.url_name == 'receive' %} checked {% endif %}>
  <input type="radio" name="radio" id="suppliers"
  {% if request.resolver_match.url_name == 'supplier' or request.resolver_match.url_name == 'supplierItem' %} checked {% endif %}>
- <input type="radio" name="radio" id="report">
+ <input type="radio" name="radio" id="asset" 
+ {% if request.resolver_match.url_name == 'assets' %} checked {% endif %}>
  <div class="slider"></div>
 <div class="nav-sidebar">
   <label for="dashboard" >
@@ -148,8 +149,10 @@ a{
     </a>
   </label>
 
-  <label for="report">
-    <i class="fa-solid fa-chart-simple"></i>Reports
+  <label for="asset">
+    <a href="{% url 'assets' %}" onclick="moveSlider(event, 'asset', this.href)">
+     <i class="fa-solid fa-wrench"></i>Assets
+    </a>
   </label>
 
 </div>

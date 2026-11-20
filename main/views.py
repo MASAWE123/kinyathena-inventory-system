@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.db.models import Q
 from django.core.paginator import Paginator
 from datetime import timedelta
+from django.http import JsonResponse
 
 # Create your views here.
 def home(request):
@@ -409,3 +410,40 @@ def supplierItem(request,supplierid):
       'page_obj':page_obj,
     }
     return render(request,'main/supplier_item_page.html',context)
+
+def assetPage(request):
+  asset = assets.objects.all()
+  if request.method == 'POST':
+    itemid = request.POST.get('itemid')
+    action = request.POST.get('action')
+    try:
+      item =assets.objects.get(id=itemid)
+    except assets.DoesNotExist:
+      return JsonResponse({
+        'success':False,
+        'message':'item not found'
+      },status = 404)
+    if action =='add':
+      item.limit_quantity += 1
+    elif action == 'subtract':
+      if item.limit_quantity > 0:
+          item.limit_quantity -=1
+      else:
+        return JsonResponse({
+        'success':False,
+        'message':'invalid action'
+        },status=400)
+    item.save()
+  
+    return JsonResponse({
+      'success':True,
+      'quantity':item.limit_quantity
+    })
+    
+  paginator = Paginator(asset,7)
+  page_number = request.GET.get("page")
+  page_obj = paginator.get_page(page_number)
+  context ={
+    'page_obj':page_obj
+  }
+  return render(request,'main/assetPage.html',context)
