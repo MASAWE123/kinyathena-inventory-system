@@ -1,10 +1,19 @@
 body{
-  margin: 90px 0 0 350px;
+  margin: 90px 0 0 220px;
   padding: 0;
   box-sizing: border-box;
-  background-color: rgba(0,0,0,0.2)
+  background-color: rgb(240, 244, 254);
+}
+html,
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
 .header{
   display: flex;
   align-items: center;
@@ -17,6 +26,7 @@ body{
   height: 60px;
   color: white;
   border-bottom: 2px solid rgba(219, 217, 217,0.);
+  z-index: 1100;
 }
 .header .leftside{
   display: flex;
@@ -86,23 +96,18 @@ nav div label{
 .main{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  column-gap: 2px;
+  column-gap: 6px;
   margin-right: 20px;
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
-  margin-bottom:70px;
-  
+  margin-bottom:10px;
+
 }
 .main div{
   display: grid;
   grid-template-columns: 1fr 2fr;
   justify-content: end;
-  height: 150px;
- 
+  height: 120px;
   margin-right: 2px;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 .main div .containerdiv{
  display: flex;
@@ -130,16 +135,16 @@ div .icon i{
   color: #fff;
 }
 main .totalItems{
-  background-color: #ee2d2d;
+  background-color:rgb(19, 112, 254);
 }
 main .lowStock{
-  background-color: #d64c00;
+  background-color: rgb(30, 201, 119);
 }
 main .outStock{
-  background-color: #fe8f38;
+  background-color: rgb(255, 178, 54);
 }
 main .suppliers{
-  background-color: #9f00b2;
+  background-color: rgb(116, 75, 237);
 }
 main .recentStock{
   margin-right: 20px;
@@ -156,4 +161,3 @@ main .Stock{
   font-size: 20px;
   font-weight: 700;
 }
-
