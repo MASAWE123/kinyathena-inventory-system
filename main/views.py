@@ -15,7 +15,11 @@ def home(request):
   lowStock = Stock.objects.filter(status='low_stock').count()
   items = Stock.objects.all().count()
   suppliers_count= Suppliers.objects.all().count()
-  print(items)
+  asset = assets.objects.all()
+  
+  
+
+  
   context = {
     'suppliers_count':suppliers_count,
     'outStock':outStock,
@@ -23,6 +27,8 @@ def home(request):
     'items':items,
     'stock_Movements':stock_Movements,
     'low_stock_table':low_stock_table,
+    'asset':asset,
+    
     }
   return render(request,'main/dashboard.html',context)
 

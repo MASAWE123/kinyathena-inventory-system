@@ -38,6 +38,7 @@
     margin-right: 20px;
     padding:10px 20px;
     margin-top: 15px;
+    border-radius: 10px;
     background-color: white;
     margin-bottom: 20px;
 }
@@ -84,7 +85,7 @@
 .recent-inventory-table .table{
     margin-top: 17px;
     border: 2px solid rgba(222, 226, 230);
-    border-radius: 7px;
+    border-radius: 10px;
     padding: 10;
     text-align: center;
 }
@@ -319,48 +320,30 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Item</th>
-                <th scope="col">Available Quantity</th>
-                <th scope="col">Minimum Stock</th>
-                <th scope="col">Status</th>
-                <th scope="col" class="action_header">Action</th>
+                <th scope="col">Current Stock</th>
+                <th scope="col">Limit Quantity</th>
+                <th scope="col">Below Threshold</th>
+                <th scope="col">Low Stock Date</th>
             </tr>
         </thead>
 
         <tbody>
-            {% for item in page_obj.object_list %}
+            {% for item in low_stock_table %}
             <tr>
                 <th scope="row">{{item.id}}</th>
                 <td>{{item.item}}</td>
                 <td>{{item.quantity}}</td>
-                <td>{{item.limit_quantity|default:"None"}}</td>
-
-                {% if item.status == 'low_stock' %}
-                <td>
-                    <span class="low_stock_item">{{item.status}}</span>
-                </td>
-
-                {% elif item.status == 'outStock' %}
-                <td>
-                    <span class="out_of_stock">{{item.status}}</span>
-                </td>
-
-                {% else %}
-                <td>
-                    <span class="in_stock">{{item.status}}</span>
-                </td>
+                {% for a in asset %}
+                 {% if a.item == item.item %}
+                <td>{{a.limit_quantity}}</td>
                 {% endif %}
+                {% endfor %}
+                <td>{{item.low_by}}</td>
+                <td>{{item.low_stock_date}}</td>
 
-                <td class="Action">
-                    <a type="button" class="btn btn-primary"
-                       href="{% url 'stockout' item.id %}">
-                        Stock Out
-                    </a>
+              
 
-                    <a type="button" class="btn btn-outline-primary"
-                       href="{% url 'stockinprompt' item.id %}">
-                        Stock In
-                    </a>
-                </td>
+               
             </tr>
             {% endfor %}
         </tbody>
