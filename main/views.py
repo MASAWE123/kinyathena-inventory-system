@@ -412,6 +412,7 @@ def supplierItem(request,supplierid):
     return render(request,'main/supplier_item_page.html',context)
 
 def assetPage(request):
+  stock = Stock.objects.all()
   asset = assets.objects.all()
   if request.method == 'POST':
     itemid = request.POST.get('itemid')
@@ -434,11 +435,26 @@ def assetPage(request):
         'message':'invalid action'
         },status=400)
     item.save()
-  
+
+    item =assets.objects.get(id=itemid) 
+    stock = Stock.objects.filter(item = item.item).first()
+    
+    if stock.quantity == 0:
+        stock.status = 'outStock'
+    elif item and stock.quantity <= item.limit_quantity:
+      stock.status = 'low_stock'
+      stock.low_stock_date = timezone.now()
+      lowby = item.limit_quantity - stock.quantity
+      stock.low_by = lowby
+    else:
+      stock.status = 'inStock'
+    stock.save()
+    
     return JsonResponse({
       'success':True,
       'quantity':item.limit_quantity
     })
+   
     
   paginator = Paginator(asset,7)
   page_number = request.GET.get("page")
@@ -447,3 +463,41 @@ def assetPage(request):
     'page_obj':page_obj
   }
   return render(request,'main/assetPage.html',context)
+
+def assetreceivePage(request):
+  stock=Stock.objects.all()
+  
+  if request.method == 'POST':
+    selectedItem = request.POST.get('assetName')
+    quantity = request.POST.get('quantity')
+    print(selectedItem)
+    print(quantity)
+
+    asset, created = assets.objects.get_or_create(
+      item = selectedItem,
+      defaults={
+        'limit_quantity':int(quantity)
+      }
+    )
+    if not created:
+      asset.limit_quantity += int(quantity)
+      asset.save()
+    stock = Stock.objects.filter(item=selectedItem).first()
+      
+    if stock.quantity == 0:
+      stock.status = 'outStock'
+    elif asset and stock.quantity <= asset.limit_quantity:
+      stock.status = 'low_stock'
+      stock.low_stock_date = timezone.now()
+      lowby = asset.limit_quantity - stock.quantity
+      stock.low_by = lowby
+    else:
+      stock.status = 'inStock'
+    stock.save()
+    print('before redirect')
+    return redirect('assets')
+
+  context={
+    'stock':stock,
+  }
+  return render(request,'main/assetreceivePage.html',context)

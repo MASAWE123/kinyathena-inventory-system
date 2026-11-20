@@ -13,5 +13,6 @@ urlpatterns = [
   path('stockmovements/',views.stockMovements,name='stockmovements'),
   path('stockmovements_details/<str:movementid>',views.stockMovements_details,name ='stockmovements_details'),
   path('supplier_item_page/<str:supplierid>',views.supplierItem,name ='supplierItem'),
-  path('assetPage/',views.assetPage,name='assets')
+  path('assetPage/',views.assetPage,name='assets'),
+  path('assetreceivePage/',views.assetreceivePage,name ='assetreceivePage')
 ]
