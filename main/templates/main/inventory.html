@@ -607,7 +607,7 @@
             <th scope="row">{{item.id}}</th>
             <td>{{item.item}}</td>
             <td>{{item.quantity}}</td>
-            <td>{{item.limit_quantity|default:"None"}}</td>
+            <td>{{item.limit_quantity|default:"-"}}</td>
             {% if item.status == 'low_stock' %}
              <td>
               <span class="low_stock_item">{{item.status}}</span>

@@ -136,16 +136,25 @@
 .action_header{
     text-align: center;
 }
-
-.Action{
-    text-align: center;
-    white-space: nowrap;
-}
-
-.Action a{
-    width: 100px;
-    margin: 0 5px;
-}
+ .movement_In{
+    display: inline-block;
+    padding: 2px 13px;
+    border-radius: 20px;
+    background:rgb(207, 238, 220);;
+    border: 1px solid #b4ebcf;
+    color: rgb(54, 121, 68);
+    font-size: 15px;
+    font-weight: 600;
+    }
+  .movement_Out{
+    display: inline-block;
+    padding: 4px 13px;
+    border-radius: 20px;
+    background: rgb(254, 237, 202);
+    color: rgb(199, 116, 43);
+    font-size: 15px;
+    font-weight: 600;
+    }
 
 </style>
   <main>
@@ -264,7 +273,17 @@
                 <th scope="row">{{item.id}}</th>
                 <td>{{item.item}}</td>
                 <td>{{item.quantity}}</td>
-                <td>{{item.movement}}</td>
+                
+                {% if item.movement == 'Out' %}
+                <td>
+                  <span class="movement_Out">stock {{item.movement}}</span> 
+                </td>
+                {% else %}
+                <td>
+                  <span class="movement_In">stock {{item.movement}}</span> 
+                </td>
+                {% endif %}
+
                 <td>{{item.reason}}</td>
                 <td>{{item.date}}</td>
             </tr>
