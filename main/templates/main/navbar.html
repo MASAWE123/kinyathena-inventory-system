@@ -115,7 +115,7 @@ a{
  <input type="radio" name="radio" id="suppliers"
  {% if request.resolver_match.url_name == 'supplier' or request.resolver_match.url_name == 'supplierItem' %} checked {% endif %}>
  <input type="radio" name="radio" id="asset" 
- {% if request.resolver_match.url_name == 'assets' %} checked {% endif %}>
+ {% if request.resolver_match.url_name == 'assets' or request.resolver_match.url_name == 'assetreceivePage' %} checked {% endif %}>
  <div class="slider"></div>
 <div class="nav-sidebar">
   <label for="dashboard" >

@@ -4,11 +4,41 @@
   .table_row{
     text-align: center;
   }
-
+  main .Stock{
+    margin-top: -20px;
+  }
+  main .Stock i{
+    color: white;
+    font-size: 16px;
+    /* margin-top: 2px; */
+    padding-top:5px;
+  }
+  main .Stock .icon{
+    background-color: blue;
+    padding: 10px 18px 0px 18px;
+    display:inline-flex;
+    align-items: center;
+    border-radius: 10px;
+    justify-content: center;
+  }
+  main .Stock p:last-child{
+    margin-left: 70px;
+    margin-top: -15px;
+  }
+  
+  main .Stock .dashboard_title{
+    margin-top: -4px;
+    font-size: 30px;
+    margin-left: 10px;
+  }
 </style>
   <main>
     <div class="Stock">
-      <span>Dashboard </span>
+      <span class="icon"><i class="fa-solid fa-chart-simple"></i></span>
+        <span class="dashboard_title">Dashboard </span>
+        <p>Overview of your inventory system</p>
+      
+      
     </div>
     <div class="main">
       <div class="totalItems">
