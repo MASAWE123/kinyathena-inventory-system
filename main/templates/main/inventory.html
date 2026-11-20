@@ -490,16 +490,15 @@
         color: rgb(54, 121, 68);
       }
       .action_header{
-        display: flex;
-        justify-content: center;
+        text-align: center;
       }
       .Action{
-          display: flex;
-          justify-content: center;
-          column-gap: 10px;
+          text-align: center;
+          white-space: nowrap;
       }
       .Action  a{
        width:100px;
+       margin: 0 5px;
       }
      
       
@@ -608,13 +607,7 @@
             <th scope="row">{{item.id}}</th>
             <td>{{item.item}}</td>
             <td>{{item.quantity}}</td>
-            {% for a in asset %}
-               {% if a.item == item.item %}
-                 <td>{{a.limit_quantity}}</td>
-               {% else %}
-               <td>None</td>
-               {% endif %}
-            {% endfor %}
+            <td>{{item.limit_quantity|default:"None"}}</td>
             {% if item.status == 'low_stock' %}
              <td>
               <span class="low_stock_item">{{item.status}}</span>

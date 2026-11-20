@@ -215,6 +215,12 @@ def stock(request):
   out_stock_count = Stock.objects.filter(status='outStock').count()
   stocks = stock_query.order_by('-id')
   asset_limits = assets.objects.all()
+  asset_limit_by_item = {
+    asset.item: asset.limit_quantity
+    for asset in asset_limits
+  }
+  for stock in stock_query:
+    stock.limit_quantity = asset_limit_by_item.get(stock.item)
 
   paginator = Paginator(stock_query,7)  
   page_number = request.GET.get('page')
