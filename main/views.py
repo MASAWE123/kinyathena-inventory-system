@@ -10,13 +10,20 @@ from django.http import JsonResponse
 # Create your views here.
 def home(request):
   low_stock_table= Stock.objects.filter(status='low_stock').order_by('-id')
-  stock_Movements = StockMovements.objects.all().order_by('-id')[:6]
+  stock_Movements = StockMovements.objects.all().order_by('-id')[:5]
   outStock = Stock.objects.filter(status='outStock').count()
   lowStock = Stock.objects.filter(status='low_stock').count()
   items = Stock.objects.all().count()
   suppliers_count= Suppliers.objects.all().count()
   print(items)
-  context = {'suppliers_count':suppliers_count,'outStock':outStock,'lowStock':lowStock,'items':items,'stock_Movements':stock_Movements,'low_stock_table':low_stock_table}
+  context = {
+    'suppliers_count':suppliers_count,
+    'outStock':outStock,
+    'lowStock':lowStock,
+    'items':items,
+    'stock_Movements':stock_Movements,
+    'low_stock_table':low_stock_table,
+    }
   return render(request,'main/dashboard.html',context)
 
 def supplierPage(request):
