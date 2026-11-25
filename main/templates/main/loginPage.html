@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <title>Document</title>
+    <style>
+    html,body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    }
+    body{
+        position: relative;
+        background-image: url("{% static 'main/images/background.png' %}");
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    body .title{
+        color: #fff;
+        margin-top:100px;
+        margin-left: 300px;
+    }
+    .title .waterIcon{
+        margin-bottom: 30px;
+        margin-left: 100px;
+    }
+    .title .waterIcon i{
+        font-size:100px;
+        color: blue;
+    }
+    .title .first{
+        font-size: 40px;
+        display: block;
+        font-weight: bold;
+        margin-left: 50px;
+    }
+    .title .second{
+        font-size: 30px;
+        margin-left: 100px;
+       
+    }
+    .title .title-line{
+        width: 400px;
+        height: 2px;
+        margin-top: 10px;
+        margin-bottom: 13px;
+       /* background: #3E92E9; */
+        background: linear-gradient(90deg, rgba(62, 146, 233, 1) 0%, rgba(250, 251, 252, 1) 50%, rgba(67, 139, 217, 1) 100%);
+    }
+
+    .title .title-second{
+        margin-left: 50px;
+    }
+      
+    body .logincard{
+        position:absolute;
+        top: 10%;
+        right: 5%;
+        min-height: 500px;
+        min-width:430px;
+        background-color:rgba(255, 254, 254,1);
+        border-radius: 7px;
+    }
+    .logincard .lock-icon{
+        background-color: rgba(209, 227, 254,0.8);
+        margin: 30px 0px 10px 160px;
+        display: inline-flex;
+        border-radius: 50%;
+    }
+    .logincard .lock-icon i{
+        font-size: 40px;
+        padding:34px 30px;
+        color: rgb(97, 175, 254);
+    }
+    .logincard .login-title{
+        margin-top: -10px;
+        margin-left: 100px;
+    }
+    .login-title span:first-child h2{
+        margin: 8px;
+    }
+    .login-title span:last-child{
+        margin-left: 30px;
+        font-size: 14px;
+        color: rgb(100, 108, 137);
+    }
+    .logincard .inputs{
+        margin-top: 20px;
+    }
+    .logincard .inputs .userinput{
+        display: flex;
+        align-items: center;
+        border: 2px solid rgb(218, 225, 237);
+        width: 360px;
+        height: 30px;
+        border-radius: 8px;
+        padding: 7px;
+        margin-left: 26px;
+    }
+    .logincard .inputs .userinput input{
+        width: 100%;
+        height: inherit;
+        border: none;
+        outline: none;
+        padding-left:15px ;
+        font-size: 16px;
+    }
+    .inputs .userinput i{
+        color:rgb(73, 90, 125);
+        font-size: 20px;
+        padding-left: 10px;
+    }
+    .inputs .userinput input::placeholder{
+        font-size: 16px;
+        
+        transform:translateY(2px)
+    }
+    .inputs .userinput_second{
+        margin-top: 25px;
+    }
+    .logincard .rememberme{
+        margin-top: 15px;
+        margin-left: 26px;
+    }
+    .logincard .rememberme label{
+        margin-left: 5px;
+        cursor: pointer;
+    }
+    .logincard .loginbutton{
+        text-align: center;
+        background-color: rgb(0, 88, 198);
+        margin: 30px 10px 0 26px;
+        padding: 15px;
+        border: none;
+        width: 380px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bolder;
+        color: #fff;
+        cursor: pointer;
+    }
+    @media(min-width:1500px){
+        body .logincard{
+            top:30%;
+        }
+         body .title{
+            margin-top: 320px;
+            margin-left: 900px;
+        }
+    }
+  
+    </style>
+    
+</head>
+<body>
+     <div class="title">
+        <div class="waterIcon">
+            <i class="fa-solid fa-droplet"></i>
+        </div>
+        <span class="first">KENYATHENA</span>
+        <span class="second">INVENTORY</span>
+        <div class="title-line"></div>
+         <div class="title-second">
+        WATER COMPANY INVENTORY SYSTEM
+     </div>
+     </div>
+    
+    <form action="{% url 'loginPage' %}" method="POST">
+    {% csrf_token %}
+    <div class="logincard">
+        <div class="lock-icon">
+            <i class="fa-solid fa-lock"></i>
+        </div>
+        <div class="login-title">
+            <span>
+                <h2>Login to Your Account</h2>
+            </span>
+            <span>Enter your credentials to continue</span>
+        </div>
+        <div class="inputs">
+            <div class="userinput">
+               <i class="fa-solid fa-user"></i> <input type="text" placeholder="Username" name="username">
+            </div>
+            <div class="userinput userinput_second">
+               <i class="fa-solid fa-lock"></i> <input type="password" placeholder="Password" name="password">
+            </div>
+        </div>
+        <div class="rememberme">
+            <input type="checkbox" id="remember" name="remember_checkbox">
+            <label for="remember">Remember Me</label>
+        </div>
+        <button class="loginbutton" type="">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+        </button>
+    </div>
+    </form>
+
+
+</body>
+</html>

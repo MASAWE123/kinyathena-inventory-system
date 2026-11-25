@@ -6,8 +6,23 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from datetime import timedelta
 from django.http import JsonResponse
-
+from django.contrib.auth import authenticate,login
 # Create your views here.
+def loginPage(request):
+  if request.method == 'POST':
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+
+    user = authenticate(request,username=username,password=password)
+
+    if user is not None:
+     login(request,user)
+     return redirect('home')
+    else:
+      return redirect('loginPage')
+
+
+  return render(request,'main/loginPage.html')
 def home(request):
   low_stock_table= Stock.objects.filter(status='low_stock').order_by('-id')
   stock_Movements = StockMovements.objects.all().order_by('-id')[:5]
